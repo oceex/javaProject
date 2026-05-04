@@ -9,13 +9,10 @@ public class TheREalOne {
         ArrayList<User> users = new ArrayList<>();
         BookingManager manager = new BookingManager();
 
-        // Default admin
         users.add(new Employee(100, "Admin", "admin@company.com", "admin123", "manager"));
         users.add(new Employee(101, "Support", "support@company.com", "support123", "supporter"));
-
-        // Create multiple sample events for demo
         
-        // Music Event 1
+        // Music 1
         EventDateTime dt1 = new EventDateTime("10-10-2026", "8PM");
         Ticket[] tickets1 = new Ticket[]{
                 new Ticket(1, "VIP", 500, "Available", null),
@@ -27,7 +24,7 @@ public class TheREalOne {
         Event event1 = new MusicEvent("Concert", dt1, "Riyadh", tickets1, "ArtistX", "Pop");
         manager.getEvents().add(event1);
 
-        // Music Event 2
+        // Music 2
         EventDateTime dt2 = new EventDateTime("15-11-2026", "7PM");
         Ticket[] tickets2 = new Ticket[]{
                 new Ticket(6, "VIP", 600, "Available", null),
@@ -37,7 +34,7 @@ public class TheREalOne {
         Event event2 = new MusicEvent("Jazz Night", dt2, "Jeddah", tickets2, "The Jazz Collective", "Jazz");
         manager.getEvents().add(event2);
 
-        // Sport Event 1
+        // Sport 1
         EventDateTime dt3 = new EventDateTime("20-10-2026", "6PM");
         Ticket[] tickets3 = new Ticket[]{
                 new Ticket(9, "Season", 1500, "Available", null),
@@ -47,7 +44,7 @@ public class TheREalOne {
         Event event3 = new SportEvent("Football Championship", dt3, "Dammam", tickets3, "Al-Hilal", "Al-Nassr");
         manager.getEvents().add(event3);
 
-        // Sport Event 2
+        // Sport 2
         EventDateTime dt4 = new EventDateTime("05-01-2027", "5PM");
         Ticket[] tickets4 = new Ticket[]{
                 new Ticket(12, "VIP", 800, "Available", null),
@@ -73,9 +70,6 @@ public class TheREalOne {
 
             switch (choice) {
 
-                // ============================
-                //          SIGN UP
-                // ============================
                 case 1:
                     System.out.println("\n--- SIGN UP ---");
                     System.out.println("1- Customer");
@@ -91,7 +85,6 @@ public class TheREalOne {
                     System.out.print("Email: ");
                     String email = k.next();
 
-                    // ===== PASSWORD VALIDATION =====
                     String pass = "";
                     boolean valid = false;
 
@@ -124,7 +117,7 @@ public class TheREalOne {
 
                         Customer c = new Customer(id, name, email, pass, interests);
                         users.add(c);
-                        System.out.println("✓ Customer created successfully");
+                        System.out.println(";) Customer created successfully");
 
                     } else if (type == 2) {
                         System.out.print("Role (manager/supporter): ");
@@ -132,13 +125,10 @@ public class TheREalOne {
 
                         Employee e = new Employee(id, name, email, pass, role);
                         users.add(e);
-                        System.out.println("✓ Employee created successfully");
+                        System.out.println(";) Employee created successfully");
                     }
                     break;
 
-                // ============================
-                //           LOGIN
-                // ============================
                 case 2:
                     System.out.println("\n--- LOGIN ---");
                     System.out.print("Email: ");
@@ -149,7 +139,6 @@ public class TheREalOne {
 
                     User found = null;
 
-                    // Search for user by email
                     for (User us : users) {
                         if (us.getEmail().equalsIgnoreCase(em)) {
                             found = us;
@@ -177,9 +166,6 @@ public class TheREalOne {
                     }
                     break;
 
-                // ============================
-                //      BROWSE EVENTS
-                // ============================
                 case 3:
                     System.out.println("\n========== ALL EVENTS ==========");
                     displayAllEvents(manager.getEvents());
@@ -191,9 +177,6 @@ public class TheREalOne {
         k.close();
     }
 
-    // ============================
-    //   DISPLAY ALL EVENTS
-    // ============================
     public static void displayAllEvents(ArrayList<Event> events) {
         if (events.isEmpty()) {
             System.out.println("No events available");
@@ -201,7 +184,7 @@ public class TheREalOne {
         }
 
         for (Event e : events) {
-            System.out.println("\n" + "=".repeat(40));
+            System.out.println("\n" + "----------------------------------------");
             System.out.println("ID: " + e.getEventId() + " | " + e.eventType());
             System.out.println("Title: " + e.getTitle());
             System.out.println(e.getDateTime());
@@ -215,7 +198,6 @@ public class TheREalOne {
                 System.out.println("Match: " + se.getTeam1() + " vs " + se.getTeam2());
             }
 
-            // Count available tickets
             int availableCount = 0;
             for (Ticket t : e.getTickets()) {
                 if (t.getStatus().equalsIgnoreCase("Available")) {
@@ -224,12 +206,9 @@ public class TheREalOne {
             }
             System.out.println("Available Tickets: " + availableCount + "/" + e.getTickets().length);
         }
-        System.out.println("=".repeat(40));
+        System.out.println("----------------------------------------");
     }
 
-    // ============================
-    //      CUSTOMER MENU FUNCTION
-    // ============================
     public static void customerMenu(Customer customer, BookingManager manager, Scanner k, ArrayList<User> users) {
 
         int c = 0;
@@ -250,12 +229,10 @@ public class TheREalOne {
 
             switch (c) {
 
-                // Browse all events
                 case 1:
                     displayAllEvents(manager.getEvents());
                     break;
 
-                // Book Ticket
                 case 2:
                     System.out.println("\n--- BOOK TICKET ---");
                     displayAllEvents(manager.getEvents());
@@ -268,13 +245,11 @@ public class TheREalOne {
                         break;
                     }
 
-                    // Display music preview if music event
                     if (selectedEvent instanceof MusicEvent) {
                         MusicEvent me = (MusicEvent) selectedEvent;
                         me.playMusicPreview();
                     }
 
-                    // Display available ticket types and quantities
                     System.out.println("\n--- AVAILABLE TICKET TYPES ---");
                     Map<String, Integer> ticketAvailability = new HashMap<>();
                     Map<String, Double> ticketPrices = new HashMap<>();
@@ -301,7 +276,6 @@ public class TheREalOne {
                     System.out.print("Choose ticket type: ");
                     int typeChoice = k.nextInt();
 
-                    // Get the selected ticket type
                     String selectedType = null;
                     int counter = 1;
                     for (Map.Entry<String, Integer> entry : ticketAvailability.entrySet()) {
@@ -327,7 +301,7 @@ public class TheREalOne {
                         }
 
                         last = manager.bookTicket(customer, selectedEvent, count, selectedType);
-                        System.out.println("✓ Booking SUCCESS");
+                        System.out.println(";) Booking SUCCESS");
                         last.printDetails();
 
                     } catch (Exception e) {
@@ -335,7 +309,6 @@ public class TheREalOne {
                     }
                     break;
 
-                // Get suggestions
                 case 3:
                     System.out.println("\n--- SUGGESTED EVENTS ---");
                     System.out.println("Your interests: " + String.join(", ", customer.getInterests()));
@@ -349,7 +322,6 @@ public class TheREalOne {
                     }
                     break;
 
-                // View reservations
                 case 4:
                     System.out.println("\n--- YOUR RESERVATIONS ---");
                     ArrayList<Reservation> reservations = customer.getReservations();
@@ -357,7 +329,7 @@ public class TheREalOne {
                         System.out.println("No reservations yet");
                     } else {
                         for (Reservation r : reservations) {
-                            System.out.println("\n" + "-".repeat(40));
+                            System.out.println("\n" + "-----------------------------------------");
                             System.out.println("Event: " + r.getEvent().getTitle());
                             r.printDetails();
                             System.out.print("Tickets: ");
@@ -369,7 +341,6 @@ public class TheREalOne {
                     }
                     break;
 
-                // Gift Ticket
                 case 5:
                     if (last == null || last.getTickets().length == 0) {
                         System.out.println(":< No tickets to gift");
@@ -396,14 +367,13 @@ public class TheREalOne {
                     try {
                         Ticket t = last.getTickets()[0];
                         manager.giftTicket(t, receiver);
-                        System.out.println("✓ Gift SUCCESS to " + receiver.getName());
+                        System.out.println(";) Gift SUCCESS to " + receiver.getName());
 
                     } catch (Exception e) {
                         System.out.println(":< " + e.getMessage());
                     }
                     break;
 
-                // Cancel Reservation
                 case 6:
                     if (last == null) {
                         System.out.println(":< No reservation to cancel");
@@ -412,7 +382,7 @@ public class TheREalOne {
 
                     try {
                         manager.cancelReservation(last);
-                        System.out.println("✓ Reservation CANCELED");
+                        System.out.println(";) Reservation CANCELED");
                         last = null;
 
                     } catch (Exception e) {
@@ -423,9 +393,6 @@ public class TheREalOne {
         }
     }
 
-    // ============================
-    //      EMPLOYEE MENU FUNCTION
-    // ============================
     public static void employeeMenu(Employee employee, BookingManager manager, Scanner k, ArrayList<User> users) {
 
         int c = 0;
@@ -444,13 +411,11 @@ public class TheREalOne {
 
             switch (c) {
 
-                // View all events
                 case 1:
                     System.out.println("\n========== ALL EVENTS ==========");
                     displayAllEvents(manager.getEvents());
                     break;
 
-                // View all reservations
                 case 2:
                     System.out.println("\n========== ALL RESERVATIONS ==========");
                     ArrayList<Reservation> allReservations = manager.getReservation();
@@ -458,7 +423,7 @@ public class TheREalOne {
                         System.out.println("No reservations in system");
                     } else {
                         for (Reservation r : allReservations) {
-                            System.out.println("\n" + "-".repeat(40));
+                            System.out.println("\n" + "----------------------------------------");
                             System.out.println("Reservation ID: " + r.getReservationId());
                             System.out.println("Customer: " + r.getUser().getName() + " (" + r.getUser().getEmail() + ")");
                             System.out.println("Event: " + r.getEvent().getTitle());
@@ -468,7 +433,6 @@ public class TheREalOne {
                     }
                     break;
 
-                // View all users
                 case 3:
                     System.out.println("\n========== ALL USERS ==========");
                     int customerCount = 0;
@@ -489,12 +453,11 @@ public class TheREalOne {
                             employeeCount++;
                         }
                     }
-                    System.out.println("\n" + "-".repeat(40));
+                    System.out.println("\n" + "----------------------------------------");
                     System.out.println("Total Customers: " + customerCount);
                     System.out.println("Total Employees: " + employeeCount);
                     break;
 
-                // System Statistics
                 case 4:
                     System.out.println("\n========== SYSTEM STATISTICS ==========");
                     int totalReservations = manager.getReservation().size();
@@ -526,7 +489,6 @@ public class TheREalOne {
                     System.out.println("Total Revenue: " + totalRevenue + " SAR");
                     break;
 
-                // View event details
                 case 5:
                     System.out.println("\n--- EVENT DETAILS ---");
                     displayAllEvents(manager.getEvents());
@@ -536,7 +498,7 @@ public class TheREalOne {
                     if (event == null) {
                         System.out.println(":< Event not found");
                     } else {
-                        System.out.println("\n" + "=".repeat(50));
+                        System.out.println("\n" + "----------------------------------------");
                         System.out.println("Event: " + event.getTitle() + " (" + event.eventType() + ")");
                         System.out.println(event.getDateTime());
                         System.out.println("Location: " + event.getLocation());
