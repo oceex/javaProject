@@ -18,7 +18,7 @@ public class BookingManager {
         return reservation;
     }
 
-    public BookingManager(ArrayList events, ArrayList reservation) {
+    public BookingManager(ArrayList<Event> events, ArrayList<Reservation> reservation) {
         this.events = events;
         this.reservation = reservation;
     }
@@ -69,7 +69,6 @@ public class BookingManager {
         
         return r;}
 
-        // Overloaded method to book specific ticket type
         public Reservation bookTicket(User user, Event event, int ticketCount, String ticketType)
            throws TicketLimitExceededException{
               if (ticketCount > Event.MAX_TICKETS_PER_BOOKING) {
@@ -136,17 +135,16 @@ public class BookingManager {
         
         public Event[] suggestEvents(Customer customer){
             ArrayList<Event> suggested=new ArrayList<>();
-            
-      for(Event e:events){
-      for(String interest: customer.getInterests()){
-      if(e.getTitle().toLowerCase().contains(interest.toLowerCase())){
-      suggested.add(e);
-      break;
-      }
-      }
-      }
-        
-       return suggested.toArray(new Event[suggested.size()]); }
+            for(Event e:events){
+                for(String interest: customer.getInterests()){
+                    if(e.getClass().getSimpleName().toLowerCase().contains(interest.toLowerCase()) || interest.toLowerCase().contains(e.getClass().getSimpleName().toLowerCase())){
+                        suggested.add(e);
+                        break;
+                    }
+                }
+            }
+            return suggested.toArray(new Event[suggested.size()]); 
+        }
 
         public User findUserByEmail(String email) {
             for (Event e : events) {
