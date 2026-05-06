@@ -61,13 +61,14 @@ public void printDetails() {
     String ownerName = (owner != null) ? owner.getName() : "No owner";
     System.out.println("Ticket ID: " + ticketId +
             " | Type: " + type +
-            " | Status: " + status +
+            " | Price: " + price +
+            "⃁ | Status: " + status +
             " | Owner: " + ownerName);
 }
 
     @Override
     public String toString() {
-        return "Ticket{id=" + ticketId + ", price=" + price + "}";
+        return "Ticket{id=" + ticketId + ", price=" + price + "⃁ }";
     }
 }
     

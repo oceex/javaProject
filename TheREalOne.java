@@ -284,7 +284,7 @@ public class TheREalOne {
 
                     int option = 1;
                     for (Map.Entry<String, Integer> entry : ticketAvailability.entrySet()) {
-                        System.out.println(option + "- " + entry.getKey() + " | Price: " + ticketPrices.get(entry.getKey()) + " SAR | Available: " + entry.getValue());
+                        System.out.println(option + "- " + entry.getKey() + " | Price: " + ticketPrices.get(entry.getKey()) + " ⃁ | Available: " + entry.getValue());
                         option++;
                     }
 
@@ -349,7 +349,7 @@ public class TheREalOne {
                             r.printDetails();
                             System.out.print("Tickets: ");
                             for (Ticket t : r.getTickets()) {
-                                System.out.print("[" + t.getType() + ": " + t.getPrice() + "SAR] ");
+                                System.out.print("[" + t.getType() + ": " + t.getPrice() + "⃁] ");
                             }
                             System.out.println();
                         }
@@ -501,7 +501,7 @@ public class TheREalOne {
                     System.out.println("Booked Tickets: " + bookedTickets + "/" + totalTickets);
                     System.out.println("Occupancy Rate: " + String.format("%.1f", ((double)bookedTickets/totalTickets)*100) + "%");
                     System.out.println("Total Reservations: " + totalReservations);
-                    System.out.println("Total Revenue: " + totalRevenue + " SAR");
+                    System.out.println("Total Revenue: " + totalRevenue + " ⃁");
                     break;
 
                 case 5:

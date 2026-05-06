@@ -44,9 +44,6 @@ public abstract class User {
         return reservations;
     }
 
-    public void setUserId(int id) {
-        this.userId = id;
-    }
 
     public void setName(String name) {
         this.name = name;

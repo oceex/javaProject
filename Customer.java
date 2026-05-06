@@ -39,8 +39,7 @@ public class Customer extends User {
         interests.remove(interest);
     }
 
-    // Convenience: suggest events by simple keyword match (BookingManager also has
-    // a method)
+
     public Event[] suggestEvents(List<Event> allEvents) {
         if (allEvents == null || interests.isEmpty())
             return new Event[0];
@@ -66,19 +65,16 @@ public class Customer extends User {
     }
 
     public String serialize() {
-        StringBuilder sb = new StringBuilder("Customer|");
-        sb.append(getUserId()).append("|")
-                .append(getName()).append("|")
-                .append(getEmail()).append("|")
-                .append(getPassword()).append("|");
+        String sb = "Customer|";
+        sb += getUserId() + "|" + getName() + "|" + getEmail() + "|" + getPassword() + "|";
         if (interests != null && interests.size() > 0) {
             for (int i = 0; i < interests.size(); i++) {
-                sb.append(interests.get(i));
+                sb+=interests.get(i);
                 if (i < interests.size() - 1)
-                    sb.append(";");
+                    sb+=";";
             }
         }
-        return sb.toString();
+        return sb;
     }
 
     @Override
