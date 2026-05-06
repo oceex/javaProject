@@ -89,13 +89,23 @@ public class TheREalOne {
                     int type = k.nextInt();
 
                     System.out.print("ID: ");
-                    int id = k.nextInt();
+                    long id = k.nextLong();
+                    while (!(id >= 1100000000 && id < 1200000000)) {
+                        System.out.println(":< ID must be 10 digits and start with 11");
+                        System.out.print("ID: ");
+                        id = k.nextLong();
+                    }
 
                     System.out.print("Name: ");
                     String name = k.next();
 
                     System.out.print("Email: ");
                     String email = k.next();
+                    while (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                        System.out.println(":< Invalid email format");
+                        System.out.print("Email: ");
+                        email = k.next();
+                    }
 
                     String pass = "";
                     boolean valid = false;
@@ -127,7 +137,7 @@ public class TheREalOne {
                                 interests.add(inter);
                         }
 
-                        int i = auth.signUp(new Customer(id, name, email, pass, interests));
+                        int i = auth.signUp(new Customer((int)id, name, email, pass, interests));
                         if (i == 0)
                             System.out.println(";) Customer created successfully");
 
@@ -135,9 +145,9 @@ public class TheREalOne {
                         System.out.print("Role (manager/supporter): ");
                         String role = k.next();
 
-                        Employee e = new Employee(id, name, email, pass, role);
-                        users.add(e);
-                        System.out.println(";) Employee created successfully");
+                        int n = auth.signUp(new Employee((int)id, name, email, pass, role));
+                        if (n == 0)
+                            System.out.println(";) Employee created successfully");
                     }
                     break;
 
@@ -497,7 +507,7 @@ public class TheREalOne {
                     }
 
                     System.out.println("Total Events: " + totalEvents);
-                    System.out.println("Total Tickets Available: " + totalTickets);
+                    System.out.println("Total Tickets: " + totalTickets);
                     System.out.println("Booked Tickets: " + bookedTickets + "/" + totalTickets);
                     System.out.println("Occupancy Rate: " + String.format("%.1f", ((double)bookedTickets/totalTickets)*100) + "%");
                     System.out.println("Total Reservations: " + totalReservations);
