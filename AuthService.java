@@ -19,13 +19,22 @@ public class AuthService {
         return null;
     }
 
-    public void signUp(User user) {
+    public int signUp(User user) {
         for (User u : users) {
-            if (u.getEmail().equals(user.getEmail())) {
-                throw new IllegalArgumentException("Email already exists");
+            if (u.getUserId()== user.getUserId())
+                {
+                    System.out.println("++++++++++  :< ID already exists  ++++++++++");
+                    return (-1);
+                }
+            else if (u.getEmail().equals(user.getEmail()))
+             {
+                System.out.println("++++++++++  :< Email already exists  ++++++++++");
+                return(-1);
             }
+
         }
         users.add(user);
+        return (0);
     }
 
     public boolean validate(String email, String pass) {

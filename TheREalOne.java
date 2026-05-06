@@ -53,6 +53,18 @@ public class TheREalOne {
         Event event4 = new SportEvent("Tennis Tournament", dt4, "Diriyah", tickets4, "Djokovic", "Alcaraz");
         manager.getEvents().add(event4);
 
+        // Conference
+        EventDateTime dt5 = new EventDateTime("10-12-2026", "10AM");
+        Ticket[] tickets5 = new Ticket[]{
+                new Ticket(14, "VIP", 400, "Available", null),
+                new Ticket(15, "VIP", 400, "Available", null),
+                new Ticket(16, "Regular", 150, "Available", null),
+                new Ticket(17, "Regular", 150, "Available", null),
+                new Ticket(18, "Student", 50, "Available", null)
+        };
+        Event event5 = new Conference("Tech Conference", dt5, "Riyadh", tickets5, "AI in Healthcare", "Dr. Smith");
+        manager.getEvents().add(event5);
+
         AuthService auth = new AuthService(users);
 
         int choice = 0;
@@ -115,9 +127,9 @@ public class TheREalOne {
                                 interests.add(inter);
                         }
 
-                        Customer c = new Customer(id, name, email, pass, interests);
-                        users.add(c);
-                        System.out.println(";) Customer created successfully");
+                        int i = auth.signUp(new Customer(id, name, email, pass, interests));
+                        if (i == 0)
+                            System.out.println(";) Customer created successfully");
 
                     } else if (type == 2) {
                         System.out.print("Role (manager/supporter): ");
@@ -196,6 +208,9 @@ public class TheREalOne {
             } else if (e instanceof SportEvent) {
                 SportEvent se = (SportEvent) e;
                 System.out.println("Match: " + se.getTeam1() + " vs " + se.getTeam2());
+            } else if (e instanceof Conference) {
+                Conference c = (Conference) e;
+                System.out.println("Topic: " + c.getTopic() + " | Speaker: " + c.getSpeaker());
             }
 
             int availableCount = 0;
@@ -509,6 +524,9 @@ public class TheREalOne {
                         } else if (event instanceof SportEvent) {
                             SportEvent se = (SportEvent) event;
                             System.out.println("Match: " + se.getTeam1() + " vs " + se.getTeam2());
+                        } else if (event instanceof Conference) {
+                            Conference conf = (Conference) event;
+                            System.out.println("Topic: " + conf.getTopic() + " | Speaker: " + conf.getSpeaker());
                         }
 
                         System.out.println("\nTickets:");
