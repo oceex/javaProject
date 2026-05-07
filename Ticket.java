@@ -5,8 +5,6 @@ public class Ticket implements Printable{
     private String status;
     private User owner;
 
-    public Ticket() {
-    }
 
     public Ticket(int ticketId, String type, double price, String status, User owner) {
         this.ticketId = ticketId;
