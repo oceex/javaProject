@@ -2,7 +2,7 @@ import java.util.*;
 public class AuthService {
     private ArrayList<User> users;
 
-    public AuthService() {}
+    public AuthService() {users =new ArrayList<>();}
 
     public AuthService(ArrayList<User> users) {
         this.users = users;
