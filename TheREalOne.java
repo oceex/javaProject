@@ -1,83 +1,21 @@
+import java.util.*;
+
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.Dialog;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Optional;
 
-public class TheREalOne extends Application {
-
-    private AuthService auth;
-    private BookingManager manager;
-    private ArrayList<User> users;
-    private User loggedUser;
-
-    private BorderPane rootPane;
-    private Label statusLabel;
-    private ListView<Event> eventListView;
-    private TextArea detailArea;
-    private Button bookButton;
-    private Button reservationsButton;
-    private Button logoutButton;
-    private Button loginButton;
-    private Button signUpButton;
+public class TheREalOne {
 
     public static void main(String[] args) {
-        launch(args);
-    }
 
-    @Override
-    public void start(Stage stage) {
-        initData();
+        Scanner k = new Scanner(System.in);
 
-        rootPane = new BorderPane();
-        rootPane.setPadding(new Insets(12));
-        rootPane.setLeft(createMenuPane());
-        rootPane.setCenter(createWelcomePane());
-        rootPane.setBottom(createStatusBar());
-
-        Scene scene = new Scene(rootPane, 1000, 650);
-        stage.setTitle("TheREalOne Event Booking");
-        stage.setScene(scene);
-        stage.show();
-
-        updateStatus("Ready. Please choose an action from the menu.");
-    }
-
-    private void initData() {
-        users = new ArrayList<>();
-        manager = new BookingManager();
+        ArrayList<User> users = new ArrayList<>();
+        BookingManager manager = new BookingManager();
 
         users.add(new Employee(100, "Admin", "admin@company.com", "admin123", "manager"));
-        users.add(new Employee(101, "Support", "support@company.com", "supporter"));
-
+        users.add(new Employee(101, "Support", "support@company.com", "support123", "supporter"));
+        
+        // Music 1
         EventDateTime dt1 = new EventDateTime("10-10-2026", "8PM");
         Ticket[] tickets1 = new Ticket[]{
                 new Ticket(1, "VIP", 500, "Available", null),
@@ -89,6 +27,7 @@ public class TheREalOne extends Application {
         Event event1 = new MusicEvent("Concert", dt1, "Riyadh", tickets1, "ArtistX", "Pop");
         manager.getEvents().add(event1);
 
+        // Music 2
         EventDateTime dt2 = new EventDateTime("15-11-2026", "7PM");
         Ticket[] tickets2 = new Ticket[]{
                 new Ticket(6, "VIP", 600, "Available", null),
@@ -98,6 +37,7 @@ public class TheREalOne extends Application {
         Event event2 = new MusicEvent("Jazz Night", dt2, "Jeddah", tickets2, "The Jazz Collective", "Jazz");
         manager.getEvents().add(event2);
 
+        // Sport 1
         EventDateTime dt3 = new EventDateTime("20-10-2026", "6PM");
         Ticket[] tickets3 = new Ticket[]{
                 new Ticket(9, "Season", 1500, "Available", null),
@@ -107,6 +47,7 @@ public class TheREalOne extends Application {
         Event event3 = new SportEvent("Football Championship", dt3, "Dammam", tickets3, "Al-Hilal", "Al-Nassr");
         manager.getEvents().add(event3);
 
+        // Sport 2
         EventDateTime dt4 = new EventDateTime("05-01-2027", "5PM");
         Ticket[] tickets4 = new Ticket[]{
                 new Ticket(12, "VIP", 800, "Available", null),
@@ -115,6 +56,7 @@ public class TheREalOne extends Application {
         Event event4 = new SportEvent("Tennis Tournament", dt4, "Diriyah", tickets4, "Djokovic", "Alcaraz");
         manager.getEvents().add(event4);
 
+        // Conference
         EventDateTime dt5 = new EventDateTime("10-12-2026", "10AM");
         Ticket[] tickets5 = new Ticket[]{
                 new Ticket(14, "VIP", 400, "Available", null),
@@ -126,1045 +68,495 @@ public class TheREalOne extends Application {
         Event event5 = new Conference("Tech Conference", dt5, "Riyadh", tickets5, "AI in Healthcare", "Dr. Smith");
         manager.getEvents().add(event5);
 
-        auth = new AuthService(users);
-    }
-
-    private Button bookTicketButton;
-    private Button suggestionsButton;
-    private Button giftTicketButton;
-    private Button cancelReservationButton;
-    private Button viewAllEventsButton;
-    private Button viewAllReservationsButton;
-    private Button viewUsersButton;
-    private Button statisticsButton;
-    private Button eventDetailsButton;
-
-    private VBox createMenuPane() {
-        VBox menu = new VBox(10);
-        menu.setPadding(new Insets(10));
-        menu.setPrefWidth(240);
-
-        Label title = new Label("Main Menu");
-        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-
-        signUpButton = new Button("Sign Up");
-        loginButton = new Button("Login");
-        Button browseButton = new Button("Browse Events");
-        bookTicketButton = new Button("Book Ticket");
-        suggestionsButton = new Button("Get Event Suggestions");
-        reservationsButton = new Button("View My Reservations");
-        giftTicketButton = new Button("Gift Ticket");
-        cancelReservationButton = new Button("Cancel Reservation");
-        viewAllEventsButton = new Button("View All Events");
-        viewAllReservationsButton = new Button("View All Reservations");
-        viewUsersButton = new Button("View All Users");
-        statisticsButton = new Button("System Statistics");
-        eventDetailsButton = new Button("View Event Details");
-        logoutButton = new Button("Logout");
-        Button exitButton = new Button("Exit");
-
-        Button[] buttons = new Button[]{
-                signUpButton,
-                loginButton,
-                browseButton,
-                bookTicketButton,
-                suggestionsButton,
-                reservationsButton,
-                giftTicketButton,
-                cancelReservationButton,
-                viewAllEventsButton,
-                viewAllReservationsButton,
-                viewUsersButton,
-                statisticsButton,
-                eventDetailsButton,
-                logoutButton,
-                exitButton
-        };
-
-        for (Button button : buttons) {
-            button.setMaxWidth(Double.MAX_VALUE);
-        }
-
-        signUpButton.setOnAction(e -> showSignUpPane());
-        loginButton.setOnAction(e -> showLoginPane());
-        browseButton.setOnAction(e -> showEventBrowserPane());
-        bookTicketButton.setOnAction(e -> showBookTicketPane());
-        suggestionsButton.setOnAction(e -> showSuggestionPane());
-        reservationsButton.setOnAction(e -> showReservationsPane());
-        giftTicketButton.setOnAction(e -> showGiftTicketPane());
-        cancelReservationButton.setOnAction(e -> showCancelReservationPane());
-        viewAllEventsButton.setOnAction(e -> showAllEventsPane());
-        viewAllReservationsButton.setOnAction(e -> showAllReservationsPane());
-        viewUsersButton.setOnAction(e -> showAllUsersPane());
-        statisticsButton.setOnAction(e -> showSystemStatisticsPane());
-        eventDetailsButton.setOnAction(e -> showEmployeeEventDetailsPane());
-        logoutButton.setOnAction(e -> doLogout());
-        exitButton.setOnAction(e -> rootPane.getScene().getWindow().hide());
-
-        menu.getChildren().addAll(title, signUpButton, loginButton, browseButton, bookTicketButton, suggestionsButton, reservationsButton, giftTicketButton, cancelReservationButton, viewAllEventsButton, viewAllReservationsButton, viewUsersButton, statisticsButton, eventDetailsButton, logoutButton, exitButton);
-        updateMenuState();
-        return menu;
-    }
-
-    private HBox createStatusBar() {
-        HBox statusBox = new HBox();
-        statusBox.setPadding(new Insets(8));
-        statusBox.setStyle("-fx-background-color: #f4f4f4; -fx-border-color: #cccccc;");
-        statusLabel = new Label();
-        statusLabel.setWrapText(true);
-        statusBox.getChildren().add(statusLabel);
-        return statusBox;
-    }
-
-    private void updateStatus(String message) {
-        statusLabel.setText(message);
-    }
-
-    private Node createWelcomePane() {
-        Label welcome = new Label("Welcome to TheREalOne Event Booking UI.");
-        welcome.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-        TextArea intro = new TextArea("Use the menu to sign up, log in, browse events, or view your reservations.\n\n" +
-                "This application uses the existing model classes and JavaFX GUI components.");
-        intro.setEditable(false);
-        intro.setWrapText(true);
-        intro.setPrefHeight(420);
-
-        VBox content = new VBox(12, welcome, intro);
-        content.setPadding(new Insets(10));
-        return content;
-    }
-
-    private void updateMenuState() {
-        boolean authenticated = loggedUser != null;
-        boolean isCustomer = loggedUser instanceof Customer;
-        boolean isEmployee = loggedUser instanceof Employee;
-
-        signUpButton.setDisable(authenticated);
-        loginButton.setDisable(authenticated);
-        bookTicketButton.setDisable(!isCustomer);
-        suggestionsButton.setDisable(!isCustomer);
-        reservationsButton.setDisable(!isCustomer);
-        giftTicketButton.setDisable(!isCustomer);
-        cancelReservationButton.setDisable(!isCustomer);
-        viewAllEventsButton.setDisable(!isEmployee);
-        viewAllReservationsButton.setDisable(!isEmployee);
-        viewUsersButton.setDisable(!isEmployee);
-        statisticsButton.setDisable(!isEmployee);
-        eventDetailsButton.setDisable(!isEmployee);
-        logoutButton.setDisable(!authenticated);
-    }
-
-    private void showSignUpPane() {
-        GridPane form = new GridPane();
-        form.setHgap(10);
-        form.setVgap(10);
-        form.setPadding(new Insets(12));
-
-        Label heading = new Label("Create a new account");
-        heading.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-        Label idLabel = new Label("User ID:");
-        TextField idField = new TextField();
-        idField.setPromptText("10 digits, starts with 11");
-
-        Label nameLabel = new Label("Name:");
-        TextField nameField = new TextField();
-
-        Label emailLabel = new Label("Email:");
-        TextField emailField = new TextField();
-
-        Label passwordLabel = new Label("Password:");
-        PasswordField passwordField = new PasswordField();
-
-        Label typeLabel = new Label("Account type:");
-        ChoiceBox<String> typeChoice = new ChoiceBox<>(FXCollections.observableArrayList("Customer", "Employee"));
-        typeChoice.getSelectionModel().selectFirst();
-
-        Label interestsLabel = new Label("Interests (comma separated):");
-        TextField interestsField = new TextField();
-
-        Label roleLabel = new Label("Role:");
-        TextField roleField = new TextField();
-        roleField.setPromptText("manager or supporter");
-        roleField.setDisable(true);
-
-        Button submit = new Button("Create Account");
-
-        typeChoice.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
-            boolean customer = "Customer".equals(newValue);
-            interestsField.setDisable(!customer);
-            interestsLabel.setDisable(!customer);
-            roleField.setDisable(customer);
-            roleLabel.setDisable(customer);
-        });
-
-        form.add(heading, 0, 0, 2, 1);
-        form.add(typeLabel, 0, 1);
-        form.add(typeChoice, 1, 1);
-        form.add(idLabel, 0, 2);
-        form.add(idField, 1, 2);
-        form.add(nameLabel, 0, 3);
-        form.add(nameField, 1, 3);
-        form.add(emailLabel, 0, 4);
-        form.add(emailField, 1, 4);
-        form.add(passwordLabel, 0, 5);
-        form.add(passwordField, 1, 5);
-        form.add(interestsLabel, 0, 6);
-        form.add(interestsField, 1, 6);
-        form.add(roleLabel, 0, 7);
-        form.add(roleField, 1, 7);
-        form.add(submit, 0, 8, 2, 1);
-
-        GridPane.setHgrow(idField, Priority.ALWAYS);
-        GridPane.setHgrow(nameField, Priority.ALWAYS);
-        GridPane.setHgrow(emailField, Priority.ALWAYS);
-        GridPane.setHgrow(passwordField, Priority.ALWAYS);
-        GridPane.setHgrow(interestsField, Priority.ALWAYS);
-        GridPane.setHgrow(roleField, Priority.ALWAYS);
-
-        submit.setOnAction(event -> {
-            String type = typeChoice.getValue();
-            String idText = idField.getText().trim();
-            String name = nameField.getText().trim();
-            String email = emailField.getText().trim();
-            String password = passwordField.getText().trim();
-            String interestsText = interestsField.getText().trim();
-            String role = roleField.getText().trim();
-
-            if (!validateSignUpInputs(type, idText, name, email, password, interestsText, role)) {
-                return;
-            }
-
-            int id;
-            try {
-                long parsed = Long.parseLong(idText);
-                if (parsed < 1100000000L || parsed >= 1200000000L) {
-                    showAlert(AlertType.WARNING, "Invalid ID", "ID must be 10 digits and start with 11.");
-                    return;
-                }
-                id = (int) parsed;
-            } catch (NumberFormatException ex) {
-                showAlert(AlertType.WARNING, "Invalid ID", "Please enter a valid numeric ID.");
-                return;
-            }
-
-            int result;
-            if ("Customer".equals(type)) {
-                ArrayList<String> interests = new ArrayList<>();
-                if (!interestsText.isBlank()) {
-                    interests.addAll(Arrays.asList(interestsText.split("\\s*,\\s*")));
-                }
-                result = auth.signUp(new Customer(id, name, email, password, interests));
-            } else {
-                if (role.isBlank()) {
-                    showAlert(AlertType.WARNING, "Invalid Role", "Role is required for employees.");
-                    return;
-                }
-                result = auth.signUp(new Employee(id, name, email, password, role));
-            }
-
-            if (result == 0) {
-                updateStatus("Account created successfully. You may now log in.");
-                rootPane.setCenter(new VBox(new Label("Account created successfully.")));
-            } else {
-                showAlert(AlertType.ERROR, "Sign Up Failed", "That user ID or email is already taken.");
-            }
-        });
-
-        rootPane.setCenter(form);
-        updateStatus("Fill in the fields to create a new account.");
-    }
-
-    private boolean validateSignUpInputs(String type, String idText, String name, String email, String password, String interestsText, String role) {
-        if (idText.isBlank() || name.isBlank() || email.isBlank() || password.isBlank()) {
-            showAlert(AlertType.WARNING, "Missing Fields", "Please complete all required fields.");
-            return false;
-        }
-        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            showAlert(AlertType.WARNING, "Invalid Email", "Please enter a valid email address.");
-            return false;
-        }
-        if (password.length() < 6) {
-            showAlert(AlertType.WARNING, "Weak Password", "Password must be at least 6 characters long.");
-            return false;
-        }
-        if (!password.matches(".*[0-9].*")) {
-            showAlert(AlertType.WARNING, "Weak Password", "Password must contain at least one digit.");
-            return false;
-        }
-        if (!password.matches(".*[A-Za-z].*")) {
-            showAlert(AlertType.WARNING, "Weak Password", "Password must contain at least one letter.");
-            return false;
-        }
-        if ("Employee".equals(type) && role.isBlank()) {
-            showAlert(AlertType.WARNING, "Invalid Role", "Employee role cannot be empty.");
-            return false;
-        }
-        return true;
-    }
-
-    private void showLoginPane() {
-        GridPane form = new GridPane();
-        form.setHgap(10);
-        form.setVgap(10);
-        form.setPadding(new Insets(12));
-
-        Label heading = new Label("Login to your account");
-        heading.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-        Label emailLabel = new Label("Email:");
-        TextField emailField = new TextField();
-        Label passwordLabel = new Label("Password:");
-        PasswordField passwordField = new PasswordField();
-
-        Button submit = new Button("Login");
-
-        form.add(heading, 0, 0, 2, 1);
-        form.add(emailLabel, 0, 1);
-        form.add(emailField, 1, 1);
-        form.add(passwordLabel, 0, 2);
-        form.add(passwordField, 1, 2);
-        form.add(submit, 0, 3, 2, 1);
-
-        GridPane.setHgrow(emailField, Priority.ALWAYS);
-        GridPane.setHgrow(passwordField, Priority.ALWAYS);
-
-        submit.setOnAction(event -> {
-            String email = emailField.getText().trim();
-            String password = passwordField.getText().trim();
-            if (email.isBlank() || password.isBlank()) {
-                showAlert(AlertType.WARNING, "Missing Credentials", "Please enter both email and password.");
-                return;
-            }
-            User user = auth.login(email, password);
-            if (user == null) {
-                showAlert(AlertType.ERROR, "Login Failed", "Incorrect email or password.");
-                updateStatus("Login failed. Please check your credentials.");
-            } else {
-                loggedUser = user;
-                updateMenuState();
-                updateStatus("Welcome back, " + user.getName() + ".");
-                showEventBrowserPane();
-            }
-        });
-
-        rootPane.setCenter(form);
-        updateStatus("Enter your email and password to log in.");
-    }
-
-    private void doLogout() {
-        if (loggedUser != null) {
-            updateStatus("Goodbye, " + loggedUser.getName() + ". You have been logged out.");
-            loggedUser = null;
-            updateMenuState();
-            rootPane.setCenter(createWelcomePane());
-        } else {
-            updateStatus("No active session.");
-        }
-    }
-
-    private void showEventBrowserPane() {
-        VBox browserPane = new VBox(12);
-        browserPane.setPadding(new Insets(12));
-
-        Label title = new Label("All Events");
-        title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-        eventListView = new ListView<>();
-        eventListView.setItems(FXCollections.observableArrayList(manager.getEvents()));
-        eventListView.setCellFactory(list -> new ListCell<Event>() {
-            @Override
-            protected void updateItem(Event item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    String available = item.isAvailable() ? "(Available)" : "(Sold Out)";
-                    setText(String.format("%s - %s %s %s", item.getEventId(), item.getTitle(), item.eventType(), available));
-                }
-            }
-        });
-        eventListView.setPrefHeight(280);
-
-        detailArea = new TextArea();
-        detailArea.setEditable(false);
-        detailArea.setWrapText(true);
-        detailArea.setPrefHeight(220);
-
-        bookButton = new Button("Book Selected Event");
-        bookButton.setDisable(true);
-        Button refreshButton = new Button("Refresh");
-
-        HBox actions = new HBox(10, bookButton, refreshButton);
-        actions.setAlignment(Pos.CENTER_LEFT);
-
-        eventListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, selectedEvent) -> {
-            updateEventDetails(selectedEvent);
-            updateBookButtonState(selectedEvent);
-        });
-
-        refreshButton.setOnAction(event -> {
-            refreshEventBrowser();
-            updateStatus("Event list refreshed.");
-        });
-
-        bookButton.setOnAction(event -> bookSelectedEvent());
-
-        browserPane.getChildren().addAll(title, eventListView, detailArea, actions);
-        VBox.setVgrow(eventListView, Priority.ALWAYS);
-        VBox.setVgrow(detailArea, Priority.ALWAYS);
-
-        rootPane.setCenter(browserPane);
-        updateStatus("Browse events and select one to see details.");
-    }
-
-    private void updateBookButtonState(Event selectedEvent) {
-        boolean canBook = selectedEvent != null && selectedEvent.isAvailable() && loggedUser instanceof Customer;
-        bookButton.setDisable(!canBook);
-    }
-
-    private void updateEventDetails(Event event) {
-        if (event == null) {
-            detailArea.setText("Select an event to see details.");
-            return;
-        }
-
-        StringBuilder text = new StringBuilder();
-        text.append("Event ID: ").append(event.getEventId()).append("\n");
-        text.append("Title: ").append(event.getTitle()).append("\n");
-        text.append("Type: ").append(event.eventType()).append("\n");
-        text.append("Date/Time: ").append(event.getDateTime()).append("\n");
-        text.append("Location: ").append(event.getLocation()).append("\n\n");
-
-        if (event instanceof MusicEvent) {
-            MusicEvent me = (MusicEvent) event;
-            text.append("Artist: ").append(me.getArtistName()).append("\n");
-            text.append("Genre: ").append(me.getGenre()).append("\n\n");
-        } else if (event instanceof SportEvent) {
-            SportEvent se = (SportEvent) event;
-            text.append("Match: ").append(se.getTeam1()).append(" vs ").append(se.getTeam2()).append("\n\n");
-        } else if (event instanceof Conference) {
-            Conference conf = (Conference) event;
-            text.append("Topic: ").append(conf.getTopic()).append("\n");
-            text.append("Speaker: ").append(conf.getSpeaker()).append("\n\n");
-        }
-
-        text.append("Tickets:\n");
-        int availableCount = 0;
-        for (Ticket ticket : event.getTickets()) {
-            text.append(String.format("  • #%d %s - %.2f ⃁ - %s\n", ticket.getTicketId(), ticket.getType(), ticket.getPrice(), ticket.getStatus()));
-            if ("Available".equalsIgnoreCase(ticket.getStatus())) {
-                availableCount++;
-            }
-        }
-        text.append("\nAvailable Tickets: ").append(availableCount).append(" / ").append(event.getTickets().length).append("\n");
-        detailArea.setText(text.toString());
-    }
-
-    private List<String> getAvailableTicketTypes(Event event) {
-        Map<String, Integer> ticketAvailability = new HashMap<>();
-        for (Ticket ticket : event.getTickets()) {
-            if ("Available".equalsIgnoreCase(ticket.getStatus())) {
-                ticketAvailability.put(ticket.getType(), ticketAvailability.getOrDefault(ticket.getType(), 0) + 1);
-            }
-        }
-        return new ArrayList<>(ticketAvailability.keySet());
-    }
-
-    private void bookSelectedEvent() {
-        Event event = eventListView.getSelectionModel().getSelectedItem();
-        if (event == null) {
-            updateStatus("No event selected.");
-            return;
-        }
-        if (!(loggedUser instanceof Customer)) {
-            showAlert(AlertType.ERROR, "Booking Required", "You must log in as a customer to book tickets.");
-            return;
-        }
-
-        List<String> ticketTypes = getAvailableTicketTypes(event);
-        if (ticketTypes.isEmpty()) {
-            showAlert(AlertType.INFORMATION, "Sold Out", "No available tickets for this event.");
-            return;
-        }
-
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Book Tickets");
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(12));
-
-        ChoiceBox<String> ticketTypeChoice = new ChoiceBox<>(FXCollections.observableArrayList(ticketTypes));
-        ticketTypeChoice.getSelectionModel().selectFirst();
-        TextField countField = new TextField("1");
-        countField.setTextFormatter(new TextFormatter<>(change -> {
-            if (change.getControlNewText().matches("[0-9]*")) {
-                return change;
-            }
-            return null;
-        }));
-
-        grid.add(new Label("Ticket Type:"), 0, 0);
-        grid.add(ticketTypeChoice, 1, 0);
-        grid.add(new Label("Quantity:"), 0, 1);
-        grid.add(countField, 1, 1);
-
-        dialog.getDialogPane().setContent(grid);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            String type = ticketTypeChoice.getValue();
-            int quantity;
-            try {
-                quantity = Integer.parseInt(countField.getText().trim());
-            } catch (NumberFormatException ex) {
-                showAlert(AlertType.WARNING, "Invalid Quantity", "Please enter a valid ticket quantity.");
-                return;
-            }
-            try {
-                manager.bookTicket(loggedUser, event, quantity, type);
-                updateStatus("Booked " + quantity + " " + type + " ticket(s) for " + event.getTitle() + ".");
-                refreshEventBrowser();
-            } catch (Exception ex) {
-                showAlert(AlertType.ERROR, "Booking Failed", ex.getMessage());
-                updateStatus("Booking failed: " + ex.getMessage());
-            }
-        }
-    }
-
-    private void refreshEventBrowser() {
-        if (eventListView == null) {
-            return;
-        }
-        ObservableList<Event> items = FXCollections.observableArrayList(manager.getEvents());
-        eventListView.setItems(items);
-        Event selected = eventListView.getSelectionModel().getSelectedItem();
-        updateEventDetails(selected);
-        updateBookButtonState(selected);
-    }
-
-    private void showReservationsPane() {
-        if (!(loggedUser instanceof Customer)) {
-            updateStatus("Only customers can view reservations.");
-            return;
-        }
-
-        Customer customer = (Customer) loggedUser;
-        VBox pane = new VBox(12);
-        pane.setPadding(new Insets(12));
-
-        Label heading = new Label("My Reservations");
-        heading.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-        TextArea reservationsArea = new TextArea();
-        reservationsArea.setEditable(false);
-        reservationsArea.setWrapText(true);
-
-        StringBuilder builder = new StringBuilder();
-        if (customer.getReservations().isEmpty()) {
-            builder.append("You have no reservations yet.\n");
-        } else {
-            for (Reservation reservation : customer.getReservations()) {
-                builder.append("Reservation ID: ").append(reservation.getReservationId()).append("\n");
-                builder.append("Event: ").append(reservation.getEvent().getTitle()).append("\n");
-                builder.append("Status: ").append(reservation.getStatus()).append("\n");
-                builder.append("Tickets:\n");
-                for (Ticket ticket : reservation.getTickets()) {
-                    builder.append(String.format("  • #%d %s - %.2f ⃁ - %s\n", ticket.getTicketId(), ticket.getType(), ticket.getPrice(), ticket.getStatus()));
-                }
-                builder.append("Total: ").append(String.format("%.2f ⃁", reservation.calcTotalPrice())).append("\n");
-                builder.append("--------------------------------\n");
+        AuthService auth = new AuthService(users);
+
+        int choice = 0;
+        User logged = null;
+
+        while (choice != 5) {
+
+            System.out.println("\n========== MAIN MENU ==========");
+            System.out.println("1- SIGN UP");
+            System.out.println("2- LOGIN");
+            System.out.println("3- BROWSE EVENTS");
+            System.out.println("4- SHOW EVENTS IN GUI");
+            System.out.println("5- EXIT");
+            System.out.print("Choose: ");
+            choice = k.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.println("\n--- SIGN UP ---");
+                    System.out.println("1- Customer");
+                    System.out.println("2- Employee");
+                    int type = k.nextInt();
+
+                    System.out.print("ID: ");
+                    long id = k.nextLong();
+                    while (!(id >= 1100000000 && id < 1200000000)) {
+                        System.out.println(":< ID must be 10 digits and start with 11");
+                        System.out.print("ID: ");
+                        id = k.nextLong();
+                    }
+
+                    System.out.print("Name: ");
+                    String name = k.next();
+
+                    System.out.print("Email: ");
+                    String email = k.next();
+                    while (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                        System.out.println(":< Invalid email format");
+                        System.out.print("Email: ");
+                        email = k.next();
+                    }
+
+                    String pass = "";
+                    boolean valid = false;
+
+                    while (!valid) {
+                        System.out.print("Password: ");
+                        pass = k.next();
+
+                        if (pass.length() < 6) {
+                            System.out.println(":< Password must be at least 6 characters");
+                        } else if (!pass.matches(".*[0-9].*")) {
+                            System.out.println(":< Password must contain at least one digit");
+                        } else if (!pass.matches(".*[A-Za-z].*")) {
+                            System.out.println(":< Password must contain at least one letter");
+                        } else {
+                            valid = true;
+                        }
+                    }
+                    System.out.println(";) Password accepted");
+
+                    if (type == 1) {
+                        System.out.println("Enter interests (type 'done' to stop):");
+                        ArrayList<String> interests = new ArrayList<>();
+                        String inter = "";
+
+                        while (!inter.equalsIgnoreCase("done")) {
+                            inter = k.next();
+                            if (!inter.equalsIgnoreCase("done"))
+                                interests.add(inter);
+                        }
+
+                        int i = auth.signUp(new Customer((int)id, name, email, pass, interests));
+                        if (i == 0)
+                            System.out.println(";) Customer created successfully");
+
+                    } else if (type == 2) {
+                        System.out.print("Role (manager/supporter): ");
+                        String role = k.next();
+
+                        int n = auth.signUp(new Employee((int)id, name, email, pass, role));
+                        if (n == 0)
+                            System.out.println(";) Employee created successfully");
+                    }
+                    break;
+
+                case 2:
+                    System.out.println("\n--- LOGIN ---");
+                    System.out.print("Email: ");
+                    String em = k.next();
+
+                    System.out.print("Password: ");
+                    String pw = k.next();
+
+                    User found = null;
+
+                    for (User us : users) {
+                        if (us.getEmail().equalsIgnoreCase(em)) {
+                            found = us;
+                            break;
+                        }
+                    }
+
+                    if (found == null) {
+                        System.out.println(":< User not found");
+                        break;
+                    }
+
+                    if (!found.getPassword().equals(pw)) {
+                        System.out.println(":< Incorrect password");
+                        break;
+                    }
+
+                    System.out.println(";) Login SUCCESS - Welcome, " + found.getName());
+                    logged = found;
+
+                    if (logged instanceof Customer) {
+                        customerMenu((Customer) logged, manager, k, users);
+                    } else if (logged instanceof Employee) {
+                        employeeMenu((Employee) logged, manager, k, users);
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("\n========== ALL EVENTS ==========");
+                    displayAllEvents(manager.getEvents());
+                    break;
+
+                case 4:
+                    System.out.println("Launching Events GUI...");
+                    EventGUI.setEvents(manager.getEvents());
+                    Application.launch(EventGUI.class);
+                    break;
             }
         }
 
-        reservationsArea.setText(builder.toString());
-        pane.getChildren().addAll(heading, reservationsArea);
-        rootPane.setCenter(pane);
-        updateStatus("Review your existing reservations.");
+        System.out.println("\n========== PROGRAM CLOSED ==========");
+        k.close();
     }
 
-    private void showBookTicketPane() {
-        if (!(loggedUser instanceof Customer)) {
-            showAlert(AlertType.ERROR, "Permission Required", "Only customers can book tickets.");
-            return;
-        }
-
-        List<Event> events = manager.getEvents();
+    public static void displayAllEvents(ArrayList<Event> events) {
         if (events.isEmpty()) {
-            showAlert(AlertType.INFORMATION, "No Events", "There are no events available to book.");
+            System.out.println("No events available");
             return;
         }
 
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Book Ticket");
+        for (Event e : events) {
+            System.out.println("\n" + "----------------------------------------");
+            System.out.println("ID: " + e.getEventId() + " | " + e.eventType());
+            System.out.println("Title: " + e.getTitle());
+            System.out.println(e.getDateTime());
+            System.out.println("Location: " + e.getLocation());
 
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(12));
-
-        ChoiceBox<Event> eventChoice = new ChoiceBox<>(FXCollections.observableArrayList(events));
-        eventChoice.setConverter(new javafx.util.StringConverter<Event>() {
-            @Override
-            public String toString(Event event) {
-                return event == null ? "" : event.getEventId() + " - " + event.getTitle();
+            if (e instanceof MusicEvent) {
+                MusicEvent me = (MusicEvent) e;
+                System.out.println("Artist: " + me.getArtistName() + " | Genre: " + me.getGenre());
+            } else if (e instanceof SportEvent) {
+                SportEvent se = (SportEvent) e;
+                System.out.println("Match: " + se.getTeam1() + " vs " + se.getTeam2());
+            } else if (e instanceof Conference) {
+                Conference c = (Conference) e;
+                System.out.println("Topic: " + c.getTopic() + " | Speaker: " + c.getSpeaker());
             }
 
-            @Override
-            public Event fromString(String string) {
-                return null;
-            }
-        });
-        eventChoice.getSelectionModel().selectFirst();
-
-        ChoiceBox<String> ticketTypeChoice = new ChoiceBox<>();
-        updateTicketTypesForSelectedEvent(eventChoice.getValue(), ticketTypeChoice);
-        eventChoice.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> updateTicketTypesForSelectedEvent(newValue, ticketTypeChoice));
-
-        TextField countField = new TextField("1");
-        countField.setTextFormatter(new TextFormatter<>(change -> {
-            if (change.getControlNewText().matches("[0-9]*")) {
-                return change;
-            }
-            return null;
-        }));
-
-        grid.add(new Label("Event:"), 0, 0);
-        grid.add(eventChoice, 1, 0);
-        grid.add(new Label("Ticket Type:"), 0, 1);
-        grid.add(ticketTypeChoice, 1, 1);
-        grid.add(new Label("Quantity:"), 0, 2);
-        grid.add(countField, 1, 2);
-
-        dialog.getDialogPane().setContent(grid);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            Event selectedEvent = eventChoice.getValue();
-            String ticketType = ticketTypeChoice.getValue();
-            if (selectedEvent == null || ticketType == null || ticketType.isBlank()) {
-                showAlert(AlertType.WARNING, "Missing Selection", "Please select an event and ticket type.");
-                return;
-            }
-
-            int quantity;
-            try {
-                quantity = Integer.parseInt(countField.getText().trim());
-            } catch (NumberFormatException ex) {
-                showAlert(AlertType.WARNING, "Invalid Quantity", "Please enter a valid numeric quantity.");
-                return;
-            }
-
-            try {
-                manager.bookTicket(loggedUser, selectedEvent, quantity, ticketType);
-                updateStatus("Booked " + quantity + " " + ticketType + " ticket(s) for " + selectedEvent.getTitle() + ".");
-                showEventBrowserPane();
-            } catch (Exception ex) {
-                showAlert(AlertType.ERROR, "Booking Failed", ex.getMessage());
-                updateStatus("Booking failed: " + ex.getMessage());
-            }
-        }
-    }
-
-    private void updateTicketTypesForSelectedEvent(Event event, ChoiceBox<String> ticketTypeChoice) {
-        ticketTypeChoice.getItems().clear();
-        if (event == null) {
-            return;
-        }
-
-        Map<String, Integer> ticketAvailability = new HashMap<>();
-        for (Ticket ticket : event.getTickets()) {
-            if (ticket != null && "Available".equalsIgnoreCase(ticket.getStatus())) {
-                ticketAvailability.put(ticket.getType(), ticketAvailability.getOrDefault(ticket.getType(), 0) + 1);
-            }
-        }
-
-        ticketTypeChoice.getItems().addAll(ticketAvailability.keySet());
-        if (!ticketTypeChoice.getItems().isEmpty()) {
-            ticketTypeChoice.getSelectionModel().selectFirst();
-        }
-    }
-
-    private void showSuggestionPane() {
-        if (!(loggedUser instanceof Customer)) {
-            updateStatus("Only customers can view suggested events.");
-            return;
-        }
-
-        Customer customer = (Customer) loggedUser;
-        Event[] suggestions = manager.suggestEvents(customer);
-
-        VBox pane = new VBox(12);
-        pane.setPadding(new Insets(12));
-        Label heading = new Label("Suggested Events");
-        heading.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-        TextArea suggestionsArea = new TextArea();
-        suggestionsArea.setEditable(false);
-        suggestionsArea.setWrapText(true);
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("Your interests: ").append(String.join(", ", customer.getInterests())).append("\n\n");
-        if (suggestions.length == 0) {
-            builder.append("No suggestions available based on your interests.");
-        } else {
-            for (Event event : suggestions) {
-                builder.append(event.getEventId()).append(" - ").append(event.getTitle()).append(" (" + event.eventType() + ")\n");
-            }
-        }
-
-        suggestionsArea.setText(builder.toString());
-        pane.getChildren().addAll(heading, suggestionsArea);
-        rootPane.setCenter(pane);
-        updateStatus("Showing event suggestions for " + customer.getName() + ".");
-    }
-
-    private void showGiftTicketPane() {
-        if (!(loggedUser instanceof Customer)) {
-            showAlert(AlertType.ERROR, "Permission Required", "Only customers can gift tickets.");
-            return;
-        }
-
-        Customer customer = (Customer) loggedUser;
-        List<Ticket> ownTickets = new ArrayList<>();
-        for (Reservation reservation : customer.getReservations()) {
-            for (Ticket ticket : reservation.getTickets()) {
-                if (ticket != null && ticket.getOwner() == customer && "Booked".equalsIgnoreCase(ticket.getStatus())) {
-                    ownTickets.add(ticket);
+            int availableCount = 0;
+            for (Ticket t : e.getTickets()) {
+                if (t.getStatus().equalsIgnoreCase("Available")) {
+                    availableCount++;
                 }
             }
+            System.out.println("Available Tickets: " + availableCount + "/" + e.getTickets().length);
         }
+        System.out.println("----------------------------------------");
+    }
 
-        if (ownTickets.isEmpty()) {
-            updateStatus("No tickets available to gift.");
-            return;
-        }
+    public static void customerMenu(Customer customer, BookingManager manager, Scanner k, ArrayList<User> users) {
 
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Gift Ticket");
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(12));
+        int c = 0;
+        Reservation last = null;
 
-        ChoiceBox<Ticket> ticketChoice = new ChoiceBox<>(FXCollections.observableArrayList(ownTickets));
-        ticketChoice.setConverter(new javafx.util.StringConverter<Ticket>() {
-            @Override
-            public String toString(Ticket ticket) {
-                return ticket == null ? "" : "#" + ticket.getTicketId() + " " + ticket.getType() + " for " + ticket.getOwner().getName();
+        while (c != 7) {
+
+            System.out.println("\n========== CUSTOMER MENU ==========");
+            System.out.println("1- Browse Events");
+            System.out.println("2- Book Ticket");
+            System.out.println("3- Get Event Suggestions");
+            System.out.println("4- View My Reservations");
+            System.out.println("5- Gift Ticket");
+            System.out.println("6- Cancel Reservation");
+            System.out.println("7- Logout");
+            System.out.print("Choose: ");
+            c = k.nextInt();
+
+            switch (c) {
+
+                case 1:
+                    displayAllEvents(manager.getEvents());
+                    break;
+
+                case 2:
+                    System.out.println("\n--- BOOK TICKET ---");
+                    displayAllEvents(manager.getEvents());
+                    System.out.print("Enter Event ID to book: ");
+                    int eventId = k.nextInt();
+
+                    Event selectedEvent = manager.viewEventDetails(eventId);
+                    if (selectedEvent == null) {
+                        System.out.println(":< Event not found");
+                        break;
+                    }
+
+                    if (selectedEvent instanceof MusicEvent) {
+                        MusicEvent me = (MusicEvent) selectedEvent;
+                        me.playMusicPreview();
+                    }
+
+                    System.out.println("\n--- AVAILABLE TICKET TYPES ---");
+                    Map<String, Integer> ticketAvailability = new HashMap<>();
+                    Map<String, Double> ticketPrices = new HashMap<>();
+                    
+                    for (Ticket t : selectedEvent.getTickets()) {
+                        if (t.getStatus().equalsIgnoreCase("Available")) {
+                            String type = t.getType();
+                            ticketAvailability.put(type, ticketAvailability.getOrDefault(type, 0) + 1);
+                            ticketPrices.put(type, t.getPrice());
+                        }
+                    }
+
+                    if (ticketAvailability.isEmpty()) {
+                        System.out.println(":< No tickets available for this event");
+                        break;
+                    }
+
+                    int option = 1;
+                    for (Map.Entry<String, Integer> entry : ticketAvailability.entrySet()) {
+                        System.out.println(option + "- " + entry.getKey() + " | Price: " + ticketPrices.get(entry.getKey()) + " ⃁ | Available: " + entry.getValue());
+                        option++;
+                    }
+
+                    System.out.print("Choose ticket type: ");
+                    int typeChoice = k.nextInt();
+
+                    String selectedType = null;
+                    int counter = 1;
+                    for (Map.Entry<String, Integer> entry : ticketAvailability.entrySet()) {
+                        if (counter == typeChoice) {
+                            selectedType = entry.getKey();
+                            break;
+                        }
+                        counter++;
+                    }
+
+                    if (selectedType == null) {
+                        System.out.println(":< Invalid ticket type selection");
+                        break;
+                    }
+
+                    try {
+                        System.out.print("How many " + selectedType + " tickets (max 5): ");
+                        int count = k.nextInt();
+
+                        if (count > ticketAvailability.get(selectedType)) {
+                            System.out.println(":< Only " + ticketAvailability.get(selectedType) + " " + selectedType + " tickets available");
+                            break;
+                        }
+
+                        last = manager.bookTicket(customer, selectedEvent, count, selectedType);
+                        System.out.println(";) Booking SUCCESS");
+                        last.printDetails();
+
+                    } catch (Exception e) {
+                        System.out.println(":< " + e.getMessage());
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("\n--- SUGGESTED EVENTS ---");
+                    System.out.println("Your interests: " + String.join(", ", customer.getInterests()));
+                    Event[] suggestions = manager.suggestEvents(customer);
+                    if (suggestions.length == 0) {
+                        System.out.println(":< No suggestions available");
+                    } else {
+                        for (Event e : suggestions) {
+                            System.out.println("→ " + e.getTitle() + " (" + e.eventType() + ")");
+                        }
+                    }
+                    break;
+
+                case 4:
+                    System.out.println("\n--- YOUR RESERVATIONS ---");
+                    ArrayList<Reservation> reservations = customer.getReservations();
+                    if (reservations.isEmpty()) {
+                        System.out.println("No reservations yet");
+                    } else {
+                        for (Reservation r : reservations) {
+                            System.out.println("\n" + "-----------------------------------------");
+                            System.out.println("Event: " + r.getEvent().getTitle());
+                            r.printDetails();
+                            System.out.print("Tickets: ");
+                            for (Ticket t : r.getTickets()) {
+                                System.out.print("[" + t.getType() + ": " + t.getPrice() + "⃁] ");
+                            }
+                            System.out.println();
+                        }
+                    }
+                    break;
+
+                case 5:
+                    if (last == null || last.getTickets().length == 0) {
+                        System.out.println(":< No tickets to gift");
+                        break;
+                    }
+
+                    System.out.println("\n--- GIFT TICKET ---");
+                    System.out.print("Enter receiver email: ");
+                    String email = k.next();
+
+                    User receiver = null;
+                    for (User u : users) {
+                        if (u.getEmail().equalsIgnoreCase(email)) {
+                            receiver = u;
+                            break;
+                        }
+                    }
+
+                    if (receiver == null || !(receiver instanceof Customer)) {
+                        System.out.println(":< Receiver not found or not a customer");
+                        break;
+                    }
+
+                    try {
+                        Ticket t = last.getTickets()[0];
+                        manager.giftTicket(t, receiver);
+                        System.out.println(";) Gift SUCCESS to " + receiver.getName());
+
+                    } catch (Exception e) {
+                        System.out.println(":< " + e.getMessage());
+                    }
+                    break;
+
+                case 6:
+                    if (last == null) {
+                        System.out.println(":< No reservation to cancel");
+                        break;
+                    }
+
+                    try {
+                        manager.cancelReservation(last);
+                        System.out.println(";) Reservation CANCELED");
+                        last = null;
+
+                    } catch (Exception e) {
+                        System.out.println(":< " + e.getMessage());
+                    }
+                    break;
             }
-
-            @Override
-            public Ticket fromString(String string) {
-                return null;
-            }
-        });
-        ticketChoice.getSelectionModel().selectFirst();
-
-        TextField receiverEmail = new TextField();
-        receiverEmail.setPromptText("receiver@example.com");
-
-        grid.add(new Label("Ticket:"), 0, 0);
-        grid.add(ticketChoice, 1, 0);
-        grid.add(new Label("Receiver Email:"), 0, 1);
-        grid.add(receiverEmail, 1, 1);
-
-        dialog.getDialogPane().setContent(grid);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            Ticket selectedTicket = ticketChoice.getValue();
-            String email = receiverEmail.getText().trim();
-            if (selectedTicket == null || email.isBlank()) {
-                showAlert(AlertType.WARNING, "Invalid Input", "Please select a ticket and enter a receiver email.");
-                return;
-            }
-
-            User receiver = users.stream().filter(u -> u.getEmail().equalsIgnoreCase(email)).findFirst().orElse(null);
-            if (!(receiver instanceof Customer)) {
-                showAlert(AlertType.ERROR, "Receiver Not Found", "Receiver must be an existing customer.");
-                return;
-            }
-
-            manager.giftTicket(selectedTicket, receiver);
-            updateStatus("Gifted ticket #" + selectedTicket.getTicketId() + " to " + receiver.getName() + ".");
-            showReservationsPane();
         }
     }
 
-    private void showCancelReservationPane() {
-        if (!(loggedUser instanceof Customer)) {
-            showAlert(AlertType.ERROR, "Permission Required", "Only customers can cancel reservations.");
-            return;
-        }
+    public static void employeeMenu(Employee employee, BookingManager manager, Scanner k, ArrayList<User> users) {
 
-        Customer customer = (Customer) loggedUser;
-        List<Reservation> reservations = customer.getReservations();
-        if (reservations.isEmpty()) {
-            updateStatus("You have no reservations to cancel.");
-            return;
-        }
+        int c = 0;
 
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Cancel Reservation");
+        while (c != 6) {
 
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(12));
+            System.out.println("\n========== EMPLOYEE MENU (" + employee.getRole().toUpperCase() + ") ==========");
+            System.out.println("1- View All Events");
+            System.out.println("2- View All Reservations");
+            System.out.println("3- View All Users");
+            System.out.println("4- System Statistics");
+            System.out.println("5- View Event Details");
+            System.out.println("6- Logout");
+            System.out.print("Choose: ");
+            c = k.nextInt();
 
-        ChoiceBox<Reservation> reservationChoice = new ChoiceBox<>(FXCollections.observableArrayList(reservations));
-        reservationChoice.setConverter(new javafx.util.StringConverter<Reservation>() {
-            @Override
-            public String toString(Reservation reservation) {
-                return reservation == null ? "" : "#" + reservation.getReservationId() + " - " + reservation.getEvent().getTitle();
-            }
+            switch (c) {
 
-            @Override
-            public Reservation fromString(String string) {
-                return null;
-            }
-        });
-        reservationChoice.getSelectionModel().selectFirst();
+                case 1:
+                    System.out.println("\n========== ALL EVENTS ==========");
+                    displayAllEvents(manager.getEvents());
+                    break;
 
-        grid.add(new Label("Reservation:"), 0, 0);
-        grid.add(reservationChoice, 1, 0);
+                case 2:
+                    System.out.println("\n========== ALL RESERVATIONS ==========");
+                    ArrayList<Reservation> allReservations = manager.getReservation();
+                    if (allReservations.isEmpty()) {
+                        System.out.println("No reservations in system");
+                    } else {
+                        for (Reservation r : allReservations) {
+                            System.out.println("\n" + "----------------------------------------");
+                            System.out.println("Reservation ID: " + r.getReservationId());
+                            System.out.println("Customer: " + r.getUser().getName() + " (" + r.getUser().getEmail() + ")");
+                            System.out.println("Event: " + r.getEvent().getTitle());
+                            System.out.println("Status: " + r.getStatus());
+                            r.printDetails();
+                        }
+                    }
+                    break;
 
-        dialog.getDialogPane().setContent(grid);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+                case 3:
+                    System.out.println("\n========== ALL USERS ==========");
+                    int customerCount = 0;
+                    int employeeCount = 0;
+                    for (User u : users) {
+                        if (u instanceof Customer) {
+                            Customer cust = (Customer) u;
+                            System.out.println("\nID: " + u.getUserId() + " | " + u.getName() + " (CUSTOMER)");
+                            System.out.println("Email: " + u.getEmail());
+                            System.out.println("Interests: " + String.join(", ", cust.getInterests()));
+                            System.out.println("Reservations: " + u.getReservations().size());
+                            customerCount++;
+                        } else if (u instanceof Employee) {
+                            Employee emp = (Employee) u;
+                            System.out.println("\nID: " + u.getUserId() + " | " + u.getName() + " (EMPLOYEE)");
+                            System.out.println("Email: " + u.getEmail());
+                            System.out.println("Role: " + emp.getRole());
+                            employeeCount++;
+                        }
+                    }
+                    System.out.println("\n" + "----------------------------------------");
+                    System.out.println("Total Customers: " + customerCount);
+                    System.out.println("Total Employees: " + employeeCount);
+                    break;
 
-        Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            Reservation reservation = reservationChoice.getValue();
-            if (reservation == null) {
-                showAlert(AlertType.WARNING, "Invalid Selection", "Please select a reservation to cancel.");
-                return;
-            }
-            manager.cancelReservation(reservation);
-            updateStatus("Reservation #" + reservation.getReservationId() + " cancelled.");
-            showReservationsPane();
-        }
-    }
+                case 4:
+                    System.out.println("\n========== SYSTEM STATISTICS ==========");
+                    int totalReservations = manager.getReservation().size();
+                    int totalEvents = manager.getEvents().size();
+                    int totalTickets = 0;
+                    int bookedTickets = 0;
+                    double totalRevenue = 0;
 
-    private void showAllEventsPane() {
-        showEventBrowserPane();
-        updateStatus("Employee view: browse all events.");
-    }
+                    for (Event e : manager.getEvents()) {
+                        totalTickets += e.getTickets().length;
+                        for (Ticket t : e.getTickets()) {
+                            if (t.getStatus().equalsIgnoreCase("Booked")) {
+                                bookedTickets++;
+                            }
+                        }
+                    }
 
-    private void showAllReservationsPane() {
-        if (!(loggedUser instanceof Employee)) {
-            showAlert(AlertType.ERROR, "Permission Required", "Only employees can view all reservations.");
-            return;
-        }
+                    for (Reservation r : manager.getReservation()) {
+                        if (r.getStatus().equalsIgnoreCase("confirmed")) {
+                            totalRevenue += r.calcTotalPrice();
+                        }
+                    }
 
-        VBox pane = new VBox(12);
-        pane.setPadding(new Insets(12));
+                    System.out.println("Total Events: " + totalEvents);
+                    System.out.println("Total Tickets: " + totalTickets);
+                    System.out.println("Booked Tickets: " + bookedTickets + "/" + totalTickets);
+                    System.out.println("Occupancy Rate: " + String.format("%.1f", ((double)bookedTickets/totalTickets)*100) + "%");
+                    System.out.println("Total Reservations: " + totalReservations);
+                    System.out.println("Total Revenue: " + totalRevenue + " ⃁");
+                    break;
 
-        Label heading = new Label("All Reservations");
-        heading.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+                case 5:
+                    System.out.println("\n--- EVENT DETAILS ---");
+                    displayAllEvents(manager.getEvents());
+                    System.out.print("Enter Event ID: ");
+                    int eventId = k.nextInt();
+                    Event event = manager.viewEventDetails(eventId);
+                    if (event == null) {
+                        System.out.println(":< Event not found");
+                    } else {
+                        System.out.println("\n" + "----------------------------------------");
+                        System.out.println("Event: " + event.getTitle() + " (" + event.eventType() + ")");
+                        System.out.println(event.getDateTime());
+                        System.out.println("Location: " + event.getLocation());
+                        
+                        if (event instanceof MusicEvent) {
+                            MusicEvent me = (MusicEvent) event;
+                            System.out.println("Artist: " + me.getArtistName() + " | Genre: " + me.getGenre());
+                        } else if (event instanceof SportEvent) {
+                            SportEvent se = (SportEvent) event;
+                            System.out.println("Match: " + se.getTeam1() + " vs " + se.getTeam2());
+                        } else if (event instanceof Conference) {
+                            Conference conf = (Conference) event;
+                            System.out.println("Topic: " + conf.getTopic() + " | Speaker: " + conf.getSpeaker());
+                        }
 
-        TextArea reservationsArea = new TextArea();
-        reservationsArea.setEditable(false);
-        reservationsArea.setWrapText(true);
-
-        StringBuilder builder = new StringBuilder();
-        ArrayList<Reservation> allReservations = manager.getReservation();
-        if (allReservations.isEmpty()) {
-            builder.append("No reservations in system.");
-        } else {
-            for (Reservation reservation : allReservations) {
-                builder.append("Reservation ID: ").append(reservation.getReservationId()).append("\n");
-                builder.append("Customer: ").append(reservation.getUser().getName()).append(" (").append(reservation.getUser().getEmail()).append(")\n");
-                builder.append("Event: ").append(reservation.getEvent().getTitle()).append("\n");
-                builder.append("Status: ").append(reservation.getStatus()).append("\n");
-                builder.append("Tickets:\n");
-                for (Ticket ticket : reservation.getTickets()) {
-                    builder.append(String.format("  • #%d %s - %.2f ⃁ - %s\n", ticket.getTicketId(), ticket.getType(), ticket.getPrice(), ticket.getStatus()));
-                }
-                builder.append("--------------------------------\n");
-            }
-        }
-
-        reservationsArea.setText(builder.toString());
-        pane.getChildren().addAll(heading, reservationsArea);
-        rootPane.setCenter(pane);
-        updateStatus("Viewing all reservations.");
-    }
-
-    private void showAllUsersPane() {
-        if (!(loggedUser instanceof Employee)) {
-            showAlert(AlertType.ERROR, "Permission Required", "Only employees can view all users.");
-            return;
-        }
-
-        VBox pane = new VBox(12);
-        pane.setPadding(new Insets(12));
-
-        Label heading = new Label("All Users");
-        heading.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-        TextArea usersArea = new TextArea();
-        usersArea.setEditable(false);
-        usersArea.setWrapText(true);
-
-        StringBuilder builder = new StringBuilder();
-        for (User user : users) {
-            builder.append(user.getUserId()).append(" - ").append(user.getName()).append(" (" + user.userType() + ")\n");
-            builder.append("Email: ").append(user.getEmail()).append("\n");
-            if (user instanceof Customer) {
-                builder.append("Interests: ").append(String.join(", ", ((Customer) user).getInterests())).append("\n");
-                builder.append("Reservations: ").append(user.getReservations().size()).append("\n");
-            } else if (user instanceof Employee) {
-                builder.append("Role: ").append(((Employee) user).getRole()).append("\n");
-            }
-            builder.append("--------------------------------\n");
-        }
-
-        usersArea.setText(builder.toString());
-        pane.getChildren().addAll(heading, usersArea);
-        rootPane.setCenter(pane);
-        updateStatus("Viewing all registered users.");
-    }
-
-    private void showSystemStatisticsPane() {
-        if (!(loggedUser instanceof Employee)) {
-            showAlert(AlertType.ERROR, "Permission Required", "Only employees can view system statistics.");
-            return;
-        }
-
-        VBox pane = new VBox(12);
-        pane.setPadding(new Insets(12));
-
-        Label heading = new Label("System Statistics");
-        heading.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-        TextArea statsArea = new TextArea();
-        statsArea.setEditable(false);
-        statsArea.setWrapText(true);
-
-        int totalReservations = manager.getReservation().size();
-        int totalEvents = manager.getEvents().size();
-        int totalTickets = 0;
-        int bookedTickets = 0;
-        double totalRevenue = 0;
-
-        for (Event event : manager.getEvents()) {
-            totalTickets += event.getTickets().length;
-            for (Ticket ticket : event.getTickets()) {
-                if ("Booked".equalsIgnoreCase(ticket.getStatus())) {
-                    bookedTickets++;
-                }
+                        System.out.println("\nTickets:");
+                        for (Ticket t : event.getTickets()) {
+                            t.printDetails();
+                        }
+                    }
+                    break;
             }
         }
-
-        for (Reservation reservation : manager.getReservation()) {
-            if ("confirmed".equalsIgnoreCase(reservation.getStatus())) {
-                totalRevenue += reservation.calcTotalPrice();
-            }
-        }
-
-        statsArea.setText(String.format("Total Events: %d\nTotal Tickets: %d\nBooked Tickets: %d/%d\nOccupancy Rate: %.1f%%\nTotal Reservations: %d\nTotal Revenue: %.2f ⃁\n", totalEvents, totalTickets, bookedTickets, totalTickets, totalTickets == 0 ? 0.0 : ((double) bookedTickets / totalTickets) * 100, totalReservations, totalRevenue));
-        pane.getChildren().addAll(heading, statsArea);
-        rootPane.setCenter(pane);
-        updateStatus("Viewing system statistics.");
-    }
-
-    private void showEmployeeEventDetailsPane() {
-        if (!(loggedUser instanceof Employee)) {
-            showAlert(AlertType.ERROR, "Permission Required", "Only employees can view event details.");
-            return;
-        }
-
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("View Event Details");
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(12));
-
-        ChoiceBox<Event> eventChoice = new ChoiceBox<>(FXCollections.observableArrayList(manager.getEvents()));
-        eventChoice.setConverter(new javafx.util.StringConverter<Event>() {
-            @Override
-            public String toString(Event event) {
-                return event == null ? "" : event.getEventId() + " - " + event.getTitle();
-            }
-
-            @Override
-            public Event fromString(String string) {
-                return null;
-            }
-        });
-        eventChoice.getSelectionModel().selectFirst();
-
-        grid.add(new Label("Event:"), 0, 0);
-        grid.add(eventChoice, 1, 0);
-
-        dialog.getDialogPane().setContent(grid);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            Event selectedEvent = eventChoice.getValue();
-            if (selectedEvent == null) {
-                showAlert(AlertType.WARNING, "No Event Selected", "Please select an event.");
-                return;
-            }
-
-            VBox pane = new VBox(12);
-            pane.setPadding(new Insets(12));
-            Label heading = new Label("Event Details");
-            heading.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-            TextArea detailsArea = new TextArea();
-            detailsArea.setEditable(false);
-            detailsArea.setWrapText(true);
-            detailsArea.setText(detailTextForEvent(selectedEvent));
-
-            pane.getChildren().addAll(heading, detailsArea);
-            rootPane.setCenter(pane);
-            updateStatus("Viewing details for event " + selectedEvent.getTitle() + ".");
-        }
-    }
-
-    private String detailTextForEvent(Event event) {
-        StringBuilder text = new StringBuilder();
-        text.append("Event ID: ").append(event.getEventId()).append("\n");
-        text.append("Title: ").append(event.getTitle()).append("\n");
-        text.append("Type: ").append(event.eventType()).append("\n");
-        text.append("Date/Time: ").append(event.getDateTime()).append("\n");
-        text.append("Location: ").append(event.getLocation()).append("\n\n");
-
-        if (event instanceof MusicEvent) {
-            MusicEvent me = (MusicEvent) event;
-            text.append("Artist: ").append(me.getArtistName()).append("\n");
-            text.append("Genre: ").append(me.getGenre()).append("\n\n");
-        } else if (event instanceof SportEvent) {
-            SportEvent se = (SportEvent) event;
-            text.append("Match: ").append(se.getTeam1()).append(" vs ").append(se.getTeam2()).append("\n\n");
-        } else if (event instanceof Conference) {
-            Conference conf = (Conference) event;
-            text.append("Topic: ").append(conf.getTopic()).append("\n");
-            text.append("Speaker: ").append(conf.getSpeaker()).append("\n\n");
-        }
-
-        text.append("Tickets:\n");
-        for (Ticket ticket : event.getTickets()) {
-            text.append(String.format("  • #%d %s - %.2f ⃁ - %s\n", ticket.getTicketId(), ticket.getType(), ticket.getPrice(), ticket.getStatus()));
-        }
-        return text.toString();
-    }
-
-    private void showAlert(AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
+
