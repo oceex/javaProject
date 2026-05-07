@@ -32,47 +32,8 @@ public class BookingManager {
         
         
         
-        public Reservation bookTicket(User user,Event event, int ticketCount)
-           throws TicketLimitExceededException{
-              if (ticketCount > Event.MAX_TICKETS_PER_BOOKING) {
-        throw new TicketLimitExceededException("Max ticket number exceeded");
-    } 
-       
-        
-       Ticket[] eventTickets=event.getTickets();
-       ArrayList<Ticket> selected=new ArrayList<>();
-       
-       for(Ticket t : eventTickets){
-       if (t.getStatus().equalsIgnoreCase("Available")) {
-    selected.add(t);
-    if (selected.size() == ticketCount) break;
-}
-       
-       if (selected.size()<ticketCount){
-       throw new RuntimeException("Not enough tickets available");
-       
-       }
-       
-       for(Ticket y:selected){
-       y.setStatus("Booked");
-       y.setOwner(user);
-       }
-    
-       Ticket[] booked= selected.toArray(new Ticket[selected.size()]);
-       
-       int id = (int)(Math.random() * 1000000);
-       Reservation r=new Reservation (id,user,event,booked,"confirmed");
-       
-       reservation.add(r);
-       user.addReservation(r);
-        
-        
-        
-        
-        return r;}
 
-    public Reservation bookTicket(User user, Event event, int ticketCount, String ticketType)
-            throws TicketLimitExceededException {
+    public Reservation bookTicket(User user, Event event, int ticketCount, String ticketType) throws TicketLimitExceededException {
 
         if (ticketCount > Event.MAX_TICKETS_PER_BOOKING) {
             throw new TicketLimitExceededException("Max ticket number exceeded");
@@ -167,3 +128,4 @@ public class BookingManager {
         }
 
 }
+
