@@ -10,6 +10,10 @@ public class BookingManager {
          reservation=new ArrayList<>();
     }
 
+    public BookingManager(ArrayList<Event> events, ArrayList<Reservation> reservation) {
+        this.events = events;
+        this.reservation = reservation;
+    }
     public ArrayList<Event> getEvents() {
         return events;
     }
@@ -18,10 +22,6 @@ public class BookingManager {
         return reservation;
     }
 
-    public BookingManager(ArrayList<Event> events, ArrayList<Reservation> reservation) {
-        this.events = events;
-        this.reservation = reservation;
-    }
     
         public Event viewEventDetails(int eventId){
         for(Event r: events){
@@ -43,8 +43,10 @@ public class BookingManager {
        ArrayList<Ticket> selected=new ArrayList<>();
        
        for(Ticket t : eventTickets){
-       if(t.getStatus().equalsIgnoreCase("Available"))
-       selected.add(t); if (selected.size()==ticketCount) break;}
+       if (t.getStatus().equalsIgnoreCase("Available")) {
+    selected.add(t);
+    if (selected.size() == ticketCount) break;
+}
        
        if (selected.size()<ticketCount){
        throw new RuntimeException("Not enough tickets available");
