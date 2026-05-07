@@ -44,8 +44,8 @@ public class Reservation implements Printable{
         return tickets;
     }
 
-    public void setTickets(Ticket[] ticlets) {
-        this.tickets = ticlets;
+    public void setTickets(Ticket[] tickets) {
+        this.tickets = tickets;
     }
 
     public String getStatus() {
