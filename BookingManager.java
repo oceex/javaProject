@@ -82,8 +82,10 @@ public class BookingManager {
        ArrayList<Ticket> selected=new ArrayList<>();
        
        for(Ticket t : eventTickets){
-       if(t.getStatus().equalsIgnoreCase("Available") && t.getType().equalsIgnoreCase(ticketType))
-       selected.add(t); if (selected.size()==ticketCount) break;}
+       if (t.getStatus().equalsIgnoreCase("Available") && t.getType().equalsIgnoreCase(ticketType)) {
+    selected.add(t);
+    if (selected.size() == ticketCount) break;
+       }
        
        if (selected.size()<ticketCount){
        throw new RuntimeException("Not enough " + ticketType + " tickets available");
