@@ -1,12 +1,12 @@
+import java.io.*;
 import java.util.*;
-
 import javafx.application.Application;
 
 
 public class TheREalOne {
 
     public static void main(String[] args) {
-
+        try{
         Scanner k = new Scanner(System.in);
 
         BookingManager manager = new BookingManager();
@@ -212,6 +212,17 @@ public class TheREalOne {
 
         System.out.println("\n========== PROGRAM CLOSED ==========");
         k.close();
+        }
+        catch(Exception e){
+            if (e instanceof IllegalArgumentException)
+               System.err.println(":< Error Illegal Argument");
+            else if (e instanceof FileNotFoundException)
+               System.err.println(":< Error File Not Found"); 
+            else if (e instanceof InputMismatchException)
+               System.err.println(":< Error Wrong Input");
+            else 
+                System.err.println(":< Error Of Type " + e.getMessage() + " Found");
+       }
     }
 
     public static void displayAllEvents(ArrayList<Event> events) {
@@ -563,5 +574,6 @@ public class TheREalOne {
             }
         }
     }
+}
 
 
