@@ -9,12 +9,8 @@ public class TheREalOne {
 
         Scanner k = new Scanner(System.in);
 
-        ArrayList<User> users = new ArrayList<>();
         BookingManager manager = new BookingManager();
 
-        users.add(new Employee(100, "Admin", "admin@company.com", "admin123", "manager"));
-        users.add(new Employee(101, "Support", "support@company.com", "support123", "supporter"));
-        
         // Music 1
         EventDateTime dt1 = new EventDateTime("10-10-2026", "8PM");
         Ticket[] tickets1 = new Ticket[]{
@@ -68,7 +64,12 @@ public class TheREalOne {
         Event event5 = new Conference("Tech Conference", dt5, "Riyadh", tickets5, "AI in Healthcare", "Dr. Smith");
         manager.getEvents().add(event5);
 
-        AuthService auth = new AuthService(users);
+        AuthService auth = new AuthService();
+        auth.loadUsersFromFile();
+        if (auth.getUsers().isEmpty()) {
+            auth.getUsers().add(new Employee(100, "Admin", "admin@company.com", "admin123", "manager"));
+            auth.getUsers().add(new Employee(101, "Support", "support@company.com", "support123", "supporter"));
+        }
 
         int choice = 0;
         User logged = null;
@@ -142,16 +143,20 @@ public class TheREalOne {
                         }
 
                         int i = auth.signUp(new Customer((int)id, name, email, pass, interests));
-                        if (i == 0)
+                        if (i == 0) {
                             System.out.println(";) Customer created successfully");
+                            auth.saveUsersToFile();
+                        }
 
                     } else if (type == 2) {
                         System.out.print("Role (manager/supporter): ");
                         String role = k.next();
 
                         int n = auth.signUp(new Employee((int)id, name, email, pass, role));
-                        if (n == 0)
+                        if (n == 0) {
                             System.out.println(";) Employee created successfully");
+                            auth.saveUsersToFile();
+                        }
                     }
                     break;
 
@@ -165,7 +170,7 @@ public class TheREalOne {
 
                     User found = null;
 
-                    for (User us : users) {
+                    for (User us : auth.getUsers()) {
                         if (us.getEmail().equalsIgnoreCase(em)) {
                             found = us;
                             break;
@@ -186,9 +191,9 @@ public class TheREalOne {
                     logged = found;
 
                     if (logged instanceof Customer) {
-                        customerMenu((Customer) logged, manager, k, users);
+                        customerMenu((Customer) logged, manager, k, auth.getUsers());
                     } else if (logged instanceof Employee) {
-                        employeeMenu((Employee) logged, manager, k, users);
+                        employeeMenu((Employee) logged, manager, k, auth.getUsers());
                     }
                     break;
 
@@ -558,5 +563,5 @@ public class TheREalOne {
             }
         }
     }
-}
+
 
