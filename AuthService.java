@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class AuthService {
+public class AuthService extends FileManager{
     private ArrayList<User> users = new ArrayList<>();
 
     public AuthService() {
@@ -52,7 +52,7 @@ public class AuthService {
     }
 
     public void saveUsersToFile() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("users.txt"))) {
+        try (Formatter formatter = new Formatter(new File(FileManager.FILE_NAME))) {
             for (User u : users) {
                 String line = u.getUserId() + "," + u.getName() + "," + u.getEmail() + "," + u.getPassword() + ",";
                 if (u instanceof Customer) {
@@ -62,17 +62,18 @@ public class AuthService {
                     Employee e = (Employee) u;
                     line += "Employee," + e.getRole();
                 }
-                writer.println(line);
+                formatter.format("%s%n", line);
             }
         } catch (IOException e) {
             System.err.println("Error saving users: " + e.getMessage());
         }
     }
 
+
     public void loadUsersFromFile() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("users.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
+        try (Scanner scanner = new Scanner(new File(FileManager.FILE_NAME))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
                 String[] parts = line.split(",");
                 if (parts.length >= 5) {
                     int id = Integer.parseInt(parts[0]);
@@ -80,6 +81,7 @@ public class AuthService {
                     String email = parts[2];
                     String password = parts[3];
                     String type = parts[4];
+
                     if (type.equals("Customer")) {
                         ArrayList<String> interests = new ArrayList<>();
                         if (parts.length > 5) {
@@ -97,4 +99,5 @@ public class AuthService {
             System.err.println("Error loading users: " + e.getMessage());
         }
     }
+
 }

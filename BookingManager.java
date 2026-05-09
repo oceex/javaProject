@@ -75,9 +75,10 @@ public class BookingManager {
 
         
           
- public void cancelReservation(Reservation r){
+public void cancelReservation(Reservation r){
 
-    if (r == null) return;
+    if (r == null) 
+        return;
 
     r.cancel();
 
