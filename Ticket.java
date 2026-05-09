@@ -60,13 +60,13 @@ public void printDetails() {
     System.out.println("Ticket ID: " + ticketId +
             " | Type: " + type +
             " | Price: " + price +
-            "⃁ | Status: " + status +
+            "SAR | Status: " + status +
             " | Owner: " + ownerName);
 }
 
     @Override
     public String toString() {
-        return "Ticket{id=" + ticketId + ", price=" + price + "⃁ }";
+        return "Ticket{id=" + ticketId + ", price=" + price + " SAR }";
     }
 }
     

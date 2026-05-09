@@ -75,6 +75,6 @@ public class Reservation implements Printable{
     @Override
     public void printDetails() {
         System.out.println("Reservation ID: " + reservationId + " | Status: " + status);
-        System.out.println("Total Price: " + calcTotalPrice()+ " ⃁");
+        System.out.println("Total Price: " + calcTotalPrice()+ " SAR");
    }
 }

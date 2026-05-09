@@ -67,8 +67,8 @@ private static boolean guiOpened = false;
         AuthService auth = new AuthService();
         auth.loadUsersFromFile();
         if (auth.getUsers().isEmpty()) {
-            auth.getUsers().add(new Employee(100, "Admin", "admin@company.com", "admin123", "manager"));
-            auth.getUsers().add(new Employee(101, "Support", "support@company.com", "support123", "supporter"));
+            auth.getUsers().add(new Employee(1100000000, "Admin", "admin@company.com", "admin123", "manager"));
+            auth.getUsers().add(new Employee(1110000000, "Support", "support@company.com", "support123", "supporter"));
         }
 
         int choice = 0;
@@ -236,7 +236,7 @@ private static boolean guiOpened = false;
             else if (e instanceof InputMismatchException)
                System.err.println(":< Error Wrong Input");
             else 
-                System.err.println(":< Error Of Type " + e.getMessage() + " Found");
+                System.err.println(":< Error Of Type ' " + e.getMessage() + " ' Found");
        }
     }
 
@@ -481,8 +481,6 @@ private static boolean guiOpened = false;
                     try {
                         Ticket t = last.getTickets()[0];
                         manager.giftTicket(t, receiver);
-                        System.out.println(";) Gift SUCCESS to " + receiver.getName());
-
                     } catch (Exception e) {
                         System.out.println(":< " + e.getMessage());
                     }

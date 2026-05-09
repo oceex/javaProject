@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class AuthService extends FileManager{
+public class AuthService{
     private ArrayList<User> users = new ArrayList<>();
 
     public AuthService() {
