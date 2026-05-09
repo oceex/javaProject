@@ -10,10 +10,6 @@ public class Customer extends User {
         super();
     }
 
-    public Customer(int userId, String name, String email, ArrayList<String> interests) {
-        this(userId, name, email, "", interests);
-    }
-
     public Customer(int userId, String name, String email, String password, ArrayList<String> interests) {
         super(userId, name, email, password);
         if (interests != null) {
@@ -50,7 +46,7 @@ public class Customer extends User {
                 continue;
             String title = e.getTitle() != null ? e.getTitle().toLowerCase() : "";
             for (String interest : interests) {
-                if (interest != null && !interest.isBlank() && title.contains(interest.toLowerCase())) {
+                if (interest != null && !interest.isBlank() && (title.contains(interest.toLowerCase()) || interest.toLowerCase().contains(title)) ) {
                     suggestions.add(e);
                     break;
                 }

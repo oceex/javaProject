@@ -3,11 +3,9 @@ public class SportEvent extends Event{
     private String team1;
     private String team2;
 
-    public SportEvent() {
-    }
-    
+
     public SportEvent(String title, EventDateTime dateTime, String location, Ticket[] tickets,String team1,String team2) {
-        super( title, dateTime,location, tickets);
+        super(title, dateTime,location, tickets);
         this.team1 = team1;
         this.team2 = team2;
     }

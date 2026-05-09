@@ -4,18 +4,9 @@ public abstract class Event {
     private String title;
     private EventDateTime dateTime;
     private String location;
-    private static int nextId = 1;
-    static final int MAX_TICKETS_PER_BOOKING = 5;
     private Ticket[] tickets;
-
-    public void setTickets(Ticket[] tickets) {
-        this.tickets = tickets;
-    }
-
-
-    public Event() {
-        this.eventId=generateId();
-    }
+    private static int nextId = 0;
+    static final int MAX_TICKETS_PER_BOOKING = 5;
 
 
     public Event(String title, EventDateTime dateTime,String location, Ticket[] tickets) {
@@ -24,6 +15,16 @@ public abstract class Event {
         this.dateTime = dateTime;
         this.tickets = tickets;
         this.eventId=generateId();
+    }
+
+
+    public Event() {
+        this.eventId=generateId();
+    }
+
+
+    public void setTickets(Ticket[] tickets) {
+        this.tickets = tickets;
     }
 
     public Ticket[] getTickets() {
@@ -89,7 +90,7 @@ public abstract class Event {
     public abstract String eventType();
 
     public static int generateId(){
-        return nextId++;
+        return ++nextId;
     }
 
     @Override

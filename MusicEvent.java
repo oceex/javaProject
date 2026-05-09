@@ -5,7 +5,7 @@ public class MusicEvent extends Event{
     public MusicEvent() {
     }
 
-    public MusicEvent( String title, EventDateTime dateTime, String location, Ticket[] tickets,String artistName, String genre) {
+    public MusicEvent(String title, EventDateTime dateTime, String location, Ticket[] tickets,String artistName, String genre) {
         super(title, dateTime,location, tickets);
         this.artistName = artistName;
         this.genre = genre;

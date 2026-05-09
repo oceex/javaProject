@@ -1,35 +1,26 @@
 import java.util.*;
 import java.io.*;
 public class AuthService {
-    private ArrayList<User> users;
+    private ArrayList<User> users = new ArrayList<>();
 
-    public AuthService() {users =new ArrayList<>();}
+    public AuthService() {
+        
+    }
 
     public AuthService(ArrayList<User> users) {
         this.users = users;
     }
 
-    public User login(String email, String pass) {
-        if (users == null) return null;
-
-        for (User u : users) {
-        if (u.getEmail().equals(email) && u.validatePassword(pass)) {
-        return u;
-        }
-        }
-        return null;
-    }
-
     public int signUp(User user) {
         for (User u : users) {
-            if (u.getUserId()== user.getUserId())
+            if (u.getUserId() == user.getUserId())
                 {
-                    System.out.println("++++++++++  :< ID already exists  ++++++++++");
+                    System.err.println("==== :< ID already exists ====");
                     return (-1);
                 }
-            else if (u.getEmail().equals(user.getEmail()))
+            else if (u.getEmail().equalsIgnoreCase(user.getEmail()))
              {
-                System.out.println("++++++++++  :< Email already exists  ++++++++++");
+                System.err.println("==== :< Email already exists ====");
                 return(-1);
             }
 
@@ -38,9 +29,24 @@ public class AuthService {
         return (0);
     }
 
+
+    public User login(String email, String pass) {
+        if (users == null)
+            return null;
+
+        for (User u : users) {
+            if (u.getEmail().equalsIgnoreCase(email) && u.validatePassword(pass)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+
     public boolean validate(String email, String pass) {
         return login(email, pass) != null;
     }
+
     public ArrayList<User> getUsers() {
         return users;
     }
@@ -59,7 +65,7 @@ public class AuthService {
                 writer.println(line);
             }
         } catch (IOException e) {
-            System.out.println("Error saving users: " + e.getMessage());
+            System.err.println("Error saving users: " + e.getMessage());
         }
     }
 
@@ -88,7 +94,7 @@ public class AuthService {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error loading users: " + e.getMessage());
+            System.err.println("Error loading users: " + e.getMessage());
         }
     }
 }
