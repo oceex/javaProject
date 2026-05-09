@@ -21,8 +21,8 @@ public class Customer extends User {
         return interests.toArray(new String[0]);
     }
 
-    public void setInterests(String[] interests) {
-        this.interests = interests != null ? new ArrayList<>(Arrays.asList(interests)) : new ArrayList<>();
+    public void setInterests(ArrayList<String> interests) {
+        this.interests = interests != null ? new ArrayList<>(interests) : new ArrayList<>();
     }
 
     public void addInterest(String interest) {
