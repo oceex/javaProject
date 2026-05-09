@@ -74,23 +74,22 @@ public class BookingManager {
     }
 
         
-    public void cancelReservation(Reservation r){
-        if (r == null) 
-            return;
+          
+ public void cancelReservation(Reservation r){
 
-        r.cancel(); 
+    if (r == null) return;
 
-        for (Ticket t : r.getTickets()) {
-            t.setStatus("Available");
-            t.setOwner(null);
-        }
+    r.cancel();
 
-    
-        r.getUser().getReservations().remove(r);
-        reservation.remove(r);
-
-        System.out.println("Reservation cancelled successfully");
+    for (Ticket t : r.getTickets()) {
+        t.setStatus("Available");
+        t.setOwner(null);
     }
+
+    r.getUser().getReservations().remove(r);
+
+    reservation.remove(r);
+}
         
       
     
