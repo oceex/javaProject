@@ -383,7 +383,7 @@ private static boolean guiOpened = false;
                         System.out.println(":< No suggestions available");
                     } else {
                         for (Event e : suggestions) {
-                            System.out.println("→ " + e.getTitle() + " (" + e.eventType() + ")");
+                            System.out.println("- " + e.getTitle() + " (" + e.eventType() + ")");
                         }
                     }
                     break;
