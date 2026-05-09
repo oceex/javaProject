@@ -4,7 +4,7 @@ import javafx.application.Application;
 
 
 public class TheREalOne {
-
+private static boolean guiOpened = false;
     public static void main(String[] args) {
         try{
         Scanner k = new Scanner(System.in);
@@ -203,9 +203,24 @@ public class TheREalOne {
                     break;
 
                 case 4:
-                    System.out.println("Launching Events GUI...");
-                    EventGUI.setEvents(manager.getEvents());
-                    Application.launch(EventGUI.class);
+                    if (!guiOpened) {
+                        guiOpened = true;
+
+                        try {
+                            System.out.println("Launching GUI...");
+
+                            EventGUI.setEvents(manager.getEvents());
+
+                            Application.launch(EventGUI.class);
+
+                        } catch (IllegalStateException e) {
+                            System.out.println(":< JavaFX already running or already launched once.");
+                        }
+
+                    } else {
+                        System.out.println("GUI already opened.");
+                    }
+
                     break;
             }
         }
