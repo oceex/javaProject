@@ -301,78 +301,126 @@ private static boolean guiOpened = false;
 
                 case 2:
                     System.out.println("\n--- BOOK TICKET ---");
+
                     displayAllEvents(manager.getEvents());
+
                     System.out.print("Enter Event ID to book: ");
+
                     int eventId = k.nextInt();
 
                     Event selectedEvent = manager.viewEventDetails(eventId);
+
                     if (selectedEvent == null) {
+
                         System.out.println(":< Event not found");
+
                         break;
                     }
 
                     if (selectedEvent instanceof MusicEvent) {
+
                         MusicEvent me = (MusicEvent) selectedEvent;
+
                         me.playMusicPreview();
                     }
 
                     System.out.println("\n--- AVAILABLE TICKET TYPES ---");
-                    Map<String, Integer> ticketAvailability = new HashMap<>();
-                    Map<String, Double> ticketPrices = new HashMap<>();
-                    
-                    for (Ticket t : selectedEvent.getTickets()) {
-                        if (t.getStatus().equalsIgnoreCase("Available")) {
-                            String type = t.getType();
-                            ticketAvailability.put(type, ticketAvailability.getOrDefault(type, 0) + 1);
-                            ticketPrices.put(type, t.getPrice());
+
+                    Ticket[] tickets = selectedEvent.getTickets();
+
+                    ArrayList<String> types = new ArrayList<String>();
+
+                    ArrayList<Double> prices = new ArrayList<Double>();
+
+                    ArrayList<Integer> counts = new ArrayList<Integer>();
+
+                    for (int i = 0; i < tickets.length; i++) {
+
+                        if (tickets[i].getStatus().equalsIgnoreCase("Available")) {
+
+                            String typeName = tickets[i].getType();
+
+                            boolean found = false;
+
+                            for (int j = 0; j < types.size(); j++) {
+
+                                if (types.get(j).equalsIgnoreCase(typeName)) {
+
+                                    counts.set(j, counts.get(j) + 1);
+
+                                    found = true;
+                                }
+                            }
+
+                            if (!found) {
+
+                                types.add(typeName);
+
+                                prices.add(tickets[i].getPrice());
+
+                                counts.add(1);
+                            }
                         }
                     }
 
-                    if (ticketAvailability.isEmpty()) {
+                    if (types.size() == 0) {
+
                         System.out.println(":< No tickets available for this event");
+
                         break;
                     }
 
-                    int option = 1;
-                    for (Map.Entry<String, Integer> entry : ticketAvailability.entrySet()) {
-                        System.out.println(option + "- " + entry.getKey() + " | Price: " + ticketPrices.get(entry.getKey()) + " SAR | Available: " + entry.getValue());
-                        option++;
+                    for (int i = 0; i < types.size(); i++) {
+
+                        System.out.println((i + 1) + "- "
+                                + types.get(i)
+                                + " | Price: "
+                                + prices.get(i)
+                                + " SAR | Available: "
+                                + counts.get(i));
                     }
 
                     System.out.print("Choose ticket type: ");
+
                     int typeChoice = k.nextInt();
 
-                    String selectedType = null;
-                    int counter = 1;
-                    for (Map.Entry<String, Integer> entry : ticketAvailability.entrySet()) {
-                        if (counter == typeChoice) {
-                            selectedType = entry.getKey();
-                            break;
-                        }
-                        counter++;
-                    }
+                    if (typeChoice < 1 || typeChoice > types.size()) {
 
-                    if (selectedType == null) {
                         System.out.println(":< Invalid ticket type selection");
+
                         break;
                     }
 
+                    String selectedType = types.get(typeChoice - 1);
+
                     try {
+
                         System.out.print("How many " + selectedType + " tickets (max 5): ");
+
                         int count = k.nextInt();
 
-                        if (count > ticketAvailability.get(selectedType)) {
-                            System.out.println(":< Only " + ticketAvailability.get(selectedType) + " " + selectedType + " tickets available");
+                        if (count > counts.get(typeChoice - 1)) {
+
+                            System.out.println(":< Only "
+                                    + counts.get(typeChoice - 1)
+                                    + " "
+                                    + selectedType
+                                    + " tickets available");
+
                             break;
                         }
 
                         last = manager.bookTicket(customer, selectedEvent, count, selectedType);
+
                         System.out.println(";) Booking SUCCESS");
+
                         last.printDetails();
 
                     } catch (Exception e) {
+
                         System.out.println(":< " + e.getMessage());
                     }
+
                     break;
 
                 case 3:
