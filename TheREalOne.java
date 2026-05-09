@@ -493,16 +493,11 @@ private static boolean guiOpened = false;
                         System.out.println(":< No reservation to cancel");
                         break;
                     }
-
-                    try {
                         manager.cancelReservation(last);
                         System.out.println(";) Reservation CANCELED");
                         last = null;
 
-                    } catch (Exception e) {
-                        System.out.println(":< " + e.getMessage());
-                    }
-                    break;
+                 break;
             }
         }
     }
